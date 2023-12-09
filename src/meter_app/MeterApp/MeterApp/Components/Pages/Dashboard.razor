@@ -1,0 +1,28 @@
+﻿<QuickGrid Items="@MeterDbContext.Stalls" Pagination="@pagination">
+    <PropertyColumn Property="@(p => p.Name)" Title="Gian hàng" />
+    <TemplateColumn Title="Nước">
+        @if (context.UseWaterMeter)
+        {
+            <div class="flex items-center">
+                Số cũ: <strong>@context.LastWaterMeter</strong>. Ngày: @context.LastWaterMeterDate?.ToLocalTime().ToString("G")
+                <br />
+                Số hiện tại: <strong>@context.LatestWaterMeter</strong>. Ngày: @context.LatestWaterMeterDate?.ToLocalTime().ToString("G")
+                <br />
+                <a href="/StallWater/@context.StallCode" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        }
+    </TemplateColumn>
+    <TemplateColumn Title="Ga">
+        @if (context.UseGasMeter)
+        {
+            <div class="flex items-center">
+                Số cũ: <strong>@context.LastGasMeter</strong>. Ngày: @context.LastGasMeterDate?.ToLocalTime().ToString("G")
+                <br />
+                Số hiện tại: <strong>@context.LatestGasMeter</strong>. Ngày: @context.LatestGasMeterDate?.ToLocalTime().ToString("G")
+                <br />
+                <a href="/StallGas/@context.StallCode" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        }
+    </TemplateColumn>
+</QuickGrid>
+<Paginator State="@pagination" />

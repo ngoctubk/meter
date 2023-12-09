@@ -1,0 +1,9 @@
+﻿@page "/StallGas/{StallCode}"
+
+Mã gian hàng: @StallCode
+<QuickGrid Items="@MeterDbContext.GasMeters.Where(w => w.StallCode == StallCode).OrderByDescending(w => w.ToTimestamp)" Pagination="@pagination">
+    <PropertyColumn Property="@(p => p.Value)" Title="Chỉ số ga" />
+    <PropertyColumn Property="@(p => p.FromTimestamp.ToLocalTime())" Format="G" Title="Từ ngày" />
+    <PropertyColumn Property="@(p => p.ToTimestamp.ToLocalTime())" Format="G" Title="Đến ngày" />
+</QuickGrid>
+<Paginator State="@pagination" />
