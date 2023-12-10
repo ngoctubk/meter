@@ -1,12 +1,13 @@
-﻿<QuickGrid Items="@MeterDbContext.Stalls" Pagination="@pagination">
+﻿
+<QuickGrid Items="@MeterDbContext.Stalls" Pagination="@pagination">
     <PropertyColumn Property="@(p => p.Name)" Title="Gian hàng" />
     <TemplateColumn Title="Nước">
         @if (context.UseWaterMeter)
         {
             <div class="flex items-center">
-                Số cũ: <strong>@context.LastWaterMeter</strong>. Ngày: @context.LastWaterMeterDate?.ToLocalTime().ToString("G")
+                Số cũ: <strong>@context.LastWaterMeter</strong>. Ngày: @context.LastWaterMeterDate?.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture)
                 <br />
-                Số hiện tại: <strong>@context.LatestWaterMeter</strong>. Ngày: @context.LatestWaterMeterDate?.ToLocalTime().ToString("G")
+                Số hiện tại: <strong>@context.LatestWaterMeter</strong>. Ngày: @context.LatestWaterMeterDate?.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture)
                 <br />
                 <a href="/StallWater/@context.StallCode" class="btn btn-primary">Xem chi tiết</a>
             </div>
@@ -16,9 +17,9 @@
         @if (context.UseGasMeter)
         {
             <div class="flex items-center">
-                Số cũ: <strong>@context.LastGasMeter</strong>. Ngày: @context.LastGasMeterDate?.ToLocalTime().ToString("G")
+                Số cũ: <strong>@context.LastGasMeter</strong>. Ngày: @context.LastGasMeterDate?.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture)
                 <br />
-                Số hiện tại: <strong>@context.LatestGasMeter</strong>. Ngày: @context.LatestGasMeterDate?.ToLocalTime().ToString("G")
+                Số hiện tại: <strong>@context.LatestGasMeter</strong>. Ngày: @context.LatestGasMeterDate?.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture)
                 <br />
                 <a href="/StallGas/@context.StallCode" class="btn btn-primary">Xem chi tiết</a>
             </div>

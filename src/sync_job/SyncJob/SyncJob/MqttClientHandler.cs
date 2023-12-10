@@ -6,8 +6,6 @@ using MQTTnet.Formatter;
 using SyncJob.Dtos;
 using SyncJob.Helpers;
 using SyncJob.Models;
-using System;
-using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
@@ -27,7 +25,6 @@ namespace SyncJob
         {
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
 
             // Get the topic and the payload from the message
             var topic = e.ApplicationMessage.Topic;

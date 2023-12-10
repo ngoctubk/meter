@@ -5,8 +5,9 @@
       "environmentVariables": {
         "POSTGRES_CONNECTION": "Host=localhost;Database=metermanagement;Username=postgres;Password=postgres",
         "MQTT_CLIENTID": "ClientId___",
-        "MQTT_SERVER": "14.177.224.115",
-        "MQTT_PORT": "1883",
+        //"MQTT_SERVER": "14.177.224.115",
+        "MQTT_SERVER": "localhost",
+        "MQTT_PORT": "2883",
         "MQTT_USERNAME": "mqtt",
         "MQTT_PASSWORD": "mqtt",
         "MQTT_TOPICS": "water/+/main/json;;gas/+/main/json"

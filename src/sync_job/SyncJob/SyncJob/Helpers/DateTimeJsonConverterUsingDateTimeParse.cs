@@ -7,8 +7,7 @@ namespace SyncJob.Helpers
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var d = DateTimeOffset.Parse(reader.GetString());
-            return DateTimeOffset.Parse(reader.GetString()).DateTime.ToUniversalTime();
+            return DateTimeOffset.Parse(reader.GetString()).UtcDateTime;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
