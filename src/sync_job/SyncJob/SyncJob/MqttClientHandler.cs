@@ -39,7 +39,8 @@ namespace SyncJob
 
             // If has error, save to Errors table and do nothing
             var meter = JsonSerializer.Deserialize<MqttMeter>(e.ApplicationMessage.PayloadSegment.AsSpan(), options);
-            if (!meter.Error.Equals("no error"))
+            DateTime beginDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            if (!meter.Error.Equals("no error") || meter.Timestamp < beginDate)
             {
                 Error error = new()
                 {
@@ -54,9 +55,9 @@ namespace SyncJob
             }
 
             // If new stall with meter add to MQTT Broker, automatically add to Stalls table
-            bool exists = await context.Stalls.AnyAsync(c => c.StallCode == stallCode);
+            bool stallExists = await context.Stalls.AnyAsync(c => c.StallCode == stallCode);
             var stall = new Stall { StallCode = stallCode };
-            if (!exists)
+            if (!stallExists)
             {
                 stall.Name = stallCode;
                 context.Stalls.Add(stall);
@@ -71,20 +72,19 @@ namespace SyncJob
                 // If message is from water meter
 
                 // Get cycle of stall's water
+                // If not exists -> 1
                 int currentWaterCycle = 1;
-                if (stall.LastWaterMeterId != null)
-                {
+                if (stallExists && await context.WaterMeters.AnyAsync(c => c.StallCode == stallCode))
                     currentWaterCycle = await context.WaterMeters.Where(c => c.StallCode == stallCode)
-                                                                .MaxAsync(c => c.Cycle);
+                                                            .MaxAsync(c => c.Cycle);
 
-                    // If meter is new, the value is small, need to register new cycle
-                    bool resetMeter = await context.WaterMeters.AnyAsync(c => c.StallCode == stallCode
-                                                      && c.Cycle == currentWaterCycle
-                                                      && c.Value > meter.Value);
-                    if (resetMeter)
-                    {
-                        currentWaterCycle++;
-                    }
+                // If meter is new, the value is smaller than some old values in max cycle, need to register new cycle
+                bool resetMeter = await context.WaterMeters.AnyAsync(c => c.StallCode == stallCode
+                                                    && c.Cycle == currentWaterCycle
+                                                    && c.Value > meter.Value);
+                if (resetMeter)
+                {
+                    currentWaterCycle++;
                 }
 
                 // Check if meter value in current cycle exists
@@ -135,19 +135,17 @@ namespace SyncJob
 
                 // Get cycle of stall's gas
                 int currentGasCycle = 1;
-                if (stall.LastGasMeterId != null)
-                {
+                if (stallExists && await context.GasMeters.AnyAsync(c => c.StallCode == stallCode))
                     currentGasCycle = await context.GasMeters.Where(c => c.StallCode == stallCode)
                                                                 .MaxAsync(c => c.Cycle);
 
-                    // If meter is new, the value is small, need to register new cycle
-                    bool resetMeter = await context.GasMeters.AnyAsync(c => c.StallCode == stallCode
-                                                      && c.Cycle == currentGasCycle
-                                                      && c.Value > meter.Value);
-                    if (resetMeter)
-                    {
-                        currentGasCycle++;
-                    }
+                // If meter is new, the value is small, need to register new cycle
+                bool resetMeter = await context.GasMeters.AnyAsync(c => c.StallCode == stallCode
+                                                  && c.Cycle == currentGasCycle
+                                                  && c.Value > meter.Value);
+                if (resetMeter)
+                {
+                    currentGasCycle++;
                 }
 
                 // Check if meter value in current cycle exists
@@ -218,9 +216,8 @@ namespace SyncJob
                                                         .Build();
 
                 mqttClient.ApplicationMessageReceivedAsync += HandleMessageAsync;
-
+                
                 Console.WriteLine("Connecting to MQTT Broker...");
-
                 _ = Task.Run(
                 async () =>
                 {

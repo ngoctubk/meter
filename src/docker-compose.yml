@@ -1,0 +1,82 @@
+version: "3.7"
+services:
+  # mqtt5 eclipse-mosquitto
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    restart: always
+    ports:
+      - "1883:1883" #default mqtt port
+      - "9001:9001" #default mqtt port for websockets
+    volumes:
+      - ./config:/mosquitto/config:rw
+      - ./data:/mosquitto/data:rw
+      - ./log:/mosquitto/log:rw
+
+  mqttx-web:
+    image: emqx/mqttx-web:latest
+    container_name: mqttx-web
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - mqtt5
+      
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  syncjob:
+    image: ngoctubk/syncjob:1.5
+    container_name: syncjob
+    restart: always
+    environment:
+      POSTGRES_CONNECTION: "Host=postgres;Database=metermanagement;Username=postgres;Password=postgres"
+      MQTT_CLIENTID: syncjob
+      MQTT_SERVER: mqtt5
+      MQTT_PORT: 1883
+      MQTT_USERNAME: mqtt
+      MQTT_PASSWORD: mqtt
+      MQTT_TOPICS: "water/+/main/json;;gas/+/main/json"
+
+  meterapp:
+    image: ngoctubk/meterapp:1.4
+    container_name: meterapp
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__Postgres: "Host=postgres;Database=metermanagement;Username=postgres;Password=postgres"
+      TZ: Asia/Bangkok
+      
+# volumes for mapping data,config and log
+volumes:
+  config:
+  data:
+  log:
+  local_pgdata:
+  pgadmin-data:
+
+networks:
+  default:
+    name: mqtt5-network

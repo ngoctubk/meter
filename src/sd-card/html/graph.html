@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en"> 
+<head>
+    <title>Data Graph</title>
+    <script type="text/javascript" src='plotly-basic-2.18.2.min.js?v=3fbff0a'></script>
+
+    <script type="text/javascript" src="common.js?v=3fbff0a"></script> 
+    <script type="text/javascript" src="readconfigcommon.js?v=3fbff0a"></script>  
+    <script type="text/javascript" src="readconfigparam.js?v=3fbff0a"></script>
+    
+    <style>
+        h1 {font-size: 2em;}
+        h2 {font-size: 1.5em; margin-block-start: 0.0em; margin-block-end: 0.2em;}
+        h3 {font-size: 1.2em;}
+        p {font-size: 1em;}
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        select {
+            padding: 3px 5px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            font-size: 16px; 
+            margin-right: 10px;
+            min-width: 100px;
+            vertical-align: middle;
+        }
+
+        .button {
+            padding: 5px 10px;
+            width: 160px;
+            font-size: 16px;
+        }
+    </style>
+
+    <script>
+    function run() {
+        datefile = document.getElementById("datafiles").value;
+        numbername = document.getElementById("numbers").value;
+        showRrelativeValues = document.getElementById("showRrelativeValues").checked;
+        //alert("Auslesen: " + datefile + " " + numbername);
+
+        _domainname = getDomainname();
+        fetch(_domainname + '/fileserver/log/data/' + datefile)
+        .then(response => {
+            // handle the response
+            if (response.status == 404) {
+                firework.launch("No data available for " + dateString, 'warning', 10000);
+            }
+            response.text()
+            .then( result => {
+                var lines = result.split("\n");
+                var traceValue =          { x: [], y: [], type: 'scatter', line: {width: 6}, name: 'Value'};
+                var tracePreValue =       { x: [], y: [], type: 'scatter', line: {width: 2}, name: 'Previous Value', visible: 'legendonly'};
+                var traceChangeRate =     { x: [], y: [], type: 'bar', yaxis: 'y2', opacity: 0.2, name: 'Change Rate'};
+                var traceChangeAbsolute = { x: [], y: [], type: 'bar', yaxis: 'y2', opacity: 0.2, name: 'Change Absolute', visible: 'legendonly'};
+
+                var timex = 1;
+                for (let line of lines) {
+                    {
+                        //console.log(line);
+                        if (line.split(",")[1] == numbername)
+                        {
+                            var value = line.split(",")[3];
+                            var preValue = line.split(",")[4];
+                            var changeRate = line.split(",")[5];
+                            var changeAbsolute = line.split(",")[6];
+                            var time  = line.split(",")[0];
+                            //console.log("> "+time+" "+value+"\n");
+
+                            traceValue.x.push(time);
+
+                            /* Catch empty fields */
+                            if (value == "" || isNaN(value)) {
+                                value = NaN;
+                            }
+
+                            if (preValue == "" || isNaN(preValue)) {
+                                preValue = NaN;
+                            }
+
+                            if (changeRate == "" || isNaN(changeRate)) {
+                                changeRate = NaN;
+                            }
+
+                            if (changeAbsolute == "" || isNaN(changeAbsolute)) {
+                                changeAbsolute = NaN;
+                            }
+
+                            traceValue.y.push(value);
+                            tracePreValue.y.push(preValue);
+                            traceChangeRate.y.push(changeRate);
+                            traceChangeAbsolute.y.push(changeAbsolute);
+                        }
+                    }
+                }
+
+                /* If the value trace starts with NaN, replace all those Nans with the first valid value */
+                var firstNonNaNIndex = 0;
+                for(var i = 0; i < traceValue.y.length; i++) {
+                    firstNonNaNIndex = i;
+                    if (! isNaN(traceValue.y[i])) {
+                        break;
+                    }
+                }
+
+                if (firstNonNaNIndex == (traceValue.y.length - 1)) {
+                    console.log("No data available for 'value'!");
+                }
+                else if (firstNonNaNIndex > 0) { // Replace all leading NaN with the first valid value 
+                    console.log("The first leading values have all just NaN, replacing them with the value of",
+                            traceValue.y[firstNonNaNIndex], "at", traceValue.x[firstNonNaNIndex], "(Index:", firstNonNaNIndex, ")");
+                    for(var i = 0; i < firstNonNaNIndex; i++) {
+                        traceValue.y[i] = traceValue.y[firstNonNaNIndex];
+                    }
+                }
+
+
+                // Copy time to all traces
+                tracePreValue.x = traceValue.x;
+                traceChangeRate.x = traceValue.x;
+                traceChangeAbsolute.x = traceValue.x;
+
+                //console.log(traceValue.y);
+
+                var offsetValue = traceValue.y[0];
+                var offsetPreValue = tracePreValue.y[0];
+
+                traceValue.connectgaps = true;
+
+                if (showRrelativeValues) {
+                    traceValue.y.forEach(function(part, index, arr) {
+                        arr[index] = arr[index] - offsetValue;
+                    });
+
+                    tracePreValue.y.forEach(function(part, index, arr) {
+                        arr[index] = arr[index] - offsetPreValue;
+                    });
+                }
+
+              //  console.log(traceValue.x)
+
+                var data = [traceValue, tracePreValue, traceChangeRate, traceChangeAbsolute];
+
+                var layout = {
+                    showlegend: true,
+                    colorway: ['green', 'black', 'blue', 'black'],
+
+                    yaxis: {title: 'Value'},
+                    yaxis2: {
+                        title: 'Change',
+                        overlaying: 'y',
+                        side: 'right'
+                    },
+
+                    margin: {
+                        l: 70,
+                        r: 70,
+                        b: 50,
+                        t: 40,
+                        pad: 4
+                    },
+
+                    legend: {
+                        x: 0.02,
+                        y: 0.97,
+                        xanchor: 'left'
+                    }
+                };
+
+                document.getElementById("chart").innerHTML = "";
+                Plotly.newPlot('chart', data, layout, {displayModeBar: true});
+            });
+        }).catch((error) => {
+            // handle the error
+            console.log(error);
+        });
+    }
+    </script>
+    <link href="firework.css?v=3fbff0a" rel="stylesheet">
+    <script type="text/javascript" src="jquery-3.6.0.min.js?v=3fbff0a"></script>  
+    <script type="text/javascript" src="firework.js?v=3fbff0a"></script>
+</head>
+
+<body>
+    <h2>Data Graph</h2>
+    <div id='chart'><p>Loading...<br></p></div>
+    Number sequence:
+    <select id="numbers" onchange="run();"></select>
+    Day:
+    <select id="datafiles" onchange="run();"></select>
+    <input type="checkbox" id="showRrelativeValues" onclick = 'run();' unchecked ><label for="showRrelativeValues">Show relative values</label><br><br>
+    <button class="button" onclick="run();">Refresh</button>
+    <button class="button" onClick="window.location.href = 'data.html?v=3fbff0a'">Show Data Viewer</button>
+    <button class="button" onClick="window.location.href = getDomainname() + '/fileserver/log/data/'">Show Data Files</button>
+
+<script>
+    function WriteModelFiles()
+    {
+        list_data = getDATAList();
+
+        var _indexDig = document.getElementById("datafiles");
+        while (_indexDig.length)
+            _indexDig.remove(0);
+
+        for (var i = list_data.length - 1; i >= 0; --i)
+        {
+            var optionDig = document.createElement("option");
+            
+            var text = list_data[i];
+            optionDig.text = text;
+            optionDig.value = list_data[i];
+            _indexDig.add(optionDig);
+        }
+    }
+
+    function WriteNumbers()
+    {
+        list_data = getNUMBERSList();
+
+        var _indexDig = document.getElementById("numbers");
+        while (_indexDig.length)
+            _indexDig.remove(0);
+
+        for (var i = 0; i < list_data.length; ++i)
+        {
+            var optionDig = document.createElement("option");
+            
+            var text = list_data[i];
+            optionDig.text = text;
+            optionDig.value = list_data[i];
+            _indexDig.add(optionDig);
+        }
+    }
+
+    WriteModelFiles();
+    WriteNumbers();
+
+    function Refresh() {
+        setTimeout (function() {
+            run();
+            Refresh();
+        }, 300000);
+    }
+
+    run();
+    Refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,3233 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+<title>Configuration</title>
+<meta charset="UTF-8" />
+
+<style>
+    h1 {font-size: 2em;}
+    h2 {font-size: 1.5em; margin-block-start: 0.0em; margin-block-end: 0.2em;}
+    h3 {font-size: 1.2em;}
+    h4 {font-size: 1.05em; margin-bottom: 0;}
+    h5 {font-size: 0.83em; margin-top: 0.2em; margin-bottom: 0;}
+    p {font-size: 1em;}
+
+    .table {
+        border: 0pt;
+        border-collapse: collapse;
+        table-layout: fixed;
+        width:100%;
+    }
+
+    td {
+        padding: 10px;
+        vertical-align: middle;
+    }
+
+    .button {
+        padding: 5px 10px;
+        width: 220px;
+        font-size: 16px;	
+    }
+
+    input[type=number] {
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        margin-right: 10px;
+        padding: 3px 5px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+
+    input[type=text] {
+        width: 96%;
+        min-width:240px;
+        max-width:96%;
+        margin-right: 10px;
+        padding: 3px 5px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+
+    select {
+        min-width: 72px;
+        max-width: 100%;
+        padding: 3px 5px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        font-size: 16px; 
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .select_large {
+        width: 100%;
+        min-width: 250px;
+        max-width: 100%;
+        padding: 3px 5px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        font-size: 16px; 
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    textarea {
+        font-size: 14px;
+    }
+
+    .description {
+        color: black;
+        font-size: 80%;
+    }
+
+    .disabled {
+        color:rgb(122, 122, 122);
+    }
+
+    #GPIO_LEDColor_value1 #GPIO_LEDColor_value2 #GPIO_LEDColor_value3 {
+        width: 30px;
+        font-size: 16px;
+    }
+
+    .invalid-input {
+        background-color: #FFAA00;
+    }
+
+    input:out-of-range {
+        background-color: rgba(255, 0, 0, 0.25);
+        border: 1px solid red;
+    }
+
+    input:invalid {
+        background-color: rgba(255, 0, 0, 0.25);
+        border: 1px solid red;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .expert {
+        background-color: #ffefef;
+        font-size: 16px;
+    }
+
+    .indent1 {
+        padding-left: 25px;
+        font-size: 16px;
+    }
+
+    .indent2 {
+        padding-left: 50px;
+        font-size: 16px;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 600px;
+        background-color: #fcfcfc;
+
+        padding: 5px;
+        padding-bottom: 0;
+
+        border: solid black 2px; 
+
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        top: 100%;
+        left: 100%;
+        margin-left: -600px;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
+
+    .tooltip-content {
+        width: calc(100% - 2px);
+        height: calc(100% - 2px);
+        padding: 1px;
+    }
+</style>
+
+<link rel="stylesheet" href="mkdocs_theme.css?v=3fbff0a" />
+<link rel="stylesheet" href="mkdocs_theme_extra.css?v=3fbff0a" />
+<link rel="stylesheet" href="github.min.css?v=3fbff0a" />
+
+<link href="firework.css?v=3fbff0a" rel="stylesheet">
+<script type="text/javascript" src="jquery-3.6.0.min.js?v=3fbff0a"></script>  
+<script type="text/javascript" src="firework.js?v=3fbff0a"></script>
+</head>
+
+<body style="font-family: arial; padding: 0px 10px;">
+	<h2>Configuration</h2>
+    <hr />
+
+<div id="divall" style="display:none">
+
+	<table class="table">
+		
+        <colgroup>
+            <col span="1" style="width:290px">
+            <col span="1" style="width:300px;">
+            <col span="1">
+        </colgroup>
+
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Configuration View</h4></td>
+		</tr> 
+		<tr>
+			<td class="indent1">
+				<input style="margin-top:12px;margin-bottom:12px" type="checkbox" id="ExpertModus_enabled" value="1"  onclick='UpdateExpertModus()' unchecked>
+					<label for="ExpertModus_enabled">Expert View</label> 
+			</td>
+			<td>
+				<button style="display:none;" class="button" id="Edit_Config_Direct" onclick="editConfigDirect()">Edit "Config.ini" File</button>
+			</td>
+		</tr>
+
+		<!------------- Take Image ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Take Image</h4></td>
+		</tr> 
+
+		<tr>
+			<td class="indent1">
+				<input type="checkbox" id="TakeImage_RawImagesLocation_enabled" value="1" onclick='InvertEnableItem("TakeImage", "RawImagesLocation")' unchecked >
+				<label for=TakeImage_RawImagesLocation_enabled><class id="TakeImage_RawImagesLocation_text" style="color:black;">Raw Images Location</class></label>
+			</td>
+			<td>
+				<input required type="text" name="name" id="TakeImage_RawImagesLocation_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>RawImagesLocation</code></h3>
+<p>Default Value: <code>/log/source</code></p>
+<p>Location on the SD-Card to store the raw images.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A SD-Card has limited write cycles. Since the device does not do <a target=_blank href="https://en.wikipedia.org/wiki/Wear_leveling">Wear Leveling</a>, this can wear out your SD-Card!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<input type="checkbox" id="TakeImage_RawImagesRetention_enabled" value="1" onclick='InvertEnableItem("TakeImage", "RawImagesRetention")' unchecked >
+				<label for=TakeImage_RawImagesRetention_enabled><class id="TakeImage_RawImagesRetention_text" style="color:black;">Raw Images Retention</class></label>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_RawImagesRetention_value1" size="13" min="0" step="1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Days
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>RawImagesRetention</code></h3>
+<p>Default Value: <code>15</code></p>
+<p>Unit: Days</p>
+<p>Number of days to keep the raw images (<code>0</code> = forever)</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert" id="ex1">
+			<td class="indent1">
+				<label><class id="TakeImage_Demo_text" style="color:black;">Demo Mode</class></label>
+			</td>
+			<td>
+				<select id="TakeImage_Demo_value1">
+					<option value="true">true</option>
+					<option value="false" selected>false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Demo</code></h3>
+<p>Default Value: <code>false</code></p>
+<p>Enable to use demo images instead of the real camera images.
+Make sure to have a <code>/demo</code> folder on your SD-Card and it contains the expected files!
+</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert" id="ex1">
+			
+			<td class="indent1">
+				<class id="TakeImage_WaitBeforeTakingPicture_text" style="color:black;">Wait Before Taking Picture</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_WaitBeforeTakingPicture_value1" size="13" min="0" step="any"
+					oninput="(!validity.rangeUnderflow||(value=0));">Seconds
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>WaitBeforeTakingPicture</code></h3>
+<p>Default Value: <code>5</code></p>
+<p>Unit: seconds</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Waiting time between switching the flash light (onboard LED) on and taking the picture.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert" id="ex2">
+			<td class="indent1">
+				<class id="TakeImage_ImageQuality_text" style="color:black;">Image Quality</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_ImageQuality_value1" size="13" min="8" max="63"
+					oninput="(!validity.rangeUnderflow||(value=8)) && (!validity.rangeOverflow||(value=63)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ImageQuality</code></h3>
+<p>Default Value: <code>12</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Quality index for pictures: <code>8</code> (highest quality) ... <code>63</code> (lowest quality)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Value below 12 could result in system instabilities!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex3">
+			<td class="indent1">
+				<class id="TakeImage_ImageSize_text" style="color:black;">Image Size</class>
+			</td>
+			<td>
+				<select id="TakeImage_ImageSize_value1">
+					<option value="VGA" selected>VGA</option>
+					<option value="QVGA" >QVGA</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ImageSize</code></h3>
+<p>Default Value: <code>VGA</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Size of the camera picture.</p>
+<p>Available options:</p>
+<ul>
+<li><code>VGA</code> (640 x 480 pixel)</li>
+<li><code>QVGA</code> (320 x 240 pixel)</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="LEDIntensity_ex3">
+			<td class="indent1">
+				<class id="TakeImage_LEDIntensity_text" style="color:black;">LED Intensity</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_LEDIntensity_value1" size="13" min="0" max="100"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.rangeOverflow||(value=100)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LEDIntensity</code></h3>
+<p>Default Value: <code>50</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!
+This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>Set the Flash LED Intensity: (<code>0</code> .. <code>100</code>)</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="Brightness_ex3">
+			<td class="indent1">
+				<class id="TakeImage_Brightness_text" style="color:black;">Brightness</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_Brightness_value1" size="13" min="-2" max="2"
+					oninput="(!validity.rangeUnderflow||(value=-2)) && (!validity.rangeOverflow||(value=2)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Brightness</code></h3>
+<p>Default Value: <code>0</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>Image Brightness (<code>-2</code> .. <code>2</code>) </p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="Contrast_ex3">
+			<td class="indent1">
+				<class id="TakeImage_Contrast_text" style="color:black;">Contrast</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_Contrast_value1" size="13" min="-2" max="2"
+					oninput="(!validity.rangeUnderflow||(value=-2)) && (!validity.rangeOverflow||(value=2)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Contrast</code></h3>
+<p>Default Value: <code>0</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>Image Contrast (<code>-2</code> .. <code>2</code>)</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="Saturation_ex3">
+			<td class="indent1">
+				<class id="TakeImage_Saturation_text" style="color:black;">Saturation</class>
+			</td>
+			<td>
+				<input required type="number" id="TakeImage_Saturation_value1" size="13" min="-2" max="2"
+					oninput="(!validity.rangeUnderflow||(value=-2)) && (!validity.rangeOverflow||(value=2)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Saturation</code></h3>
+<p>Default Value: <code>0</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>Image Saturation (<code>-2</code> .. <code>2</code>)</p>
+    </span></div></div>
+</td>
+		</tr>
+		
+		<tr class="expert"  id="TakeImage_FixedExposure_ex10">
+			<td class="indent1">
+				<class id="TakeImage_FixedExposure_text" style="color:black;">Fixed Exposure</class>
+			</td>
+			<td>
+				<select id="TakeImage_FixedExposure_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>FixedExposure</code></h3>
+<p>Default Value: <code>false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Fixes the illumination setting of camera at the startup and uses this later -&gt; Individual round is faster.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Alignment ------------------>
+		<tr class="expert"  style="border-bottom: 2px solid lightgray;" id="ex4">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Alignment</h4></td>
+		</tr>
+
+		<tr class="expert"  id="ex6">
+			<td class="indent1">
+			    <class id="Alignment_SearchFieldX_text" style="color:black;">Search Field X</class>
+			</td>
+			<td>
+				<input required type="number" name="name" id="Alignment_SearchFieldX_value1" size="13" min="1"  step="1"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Pixel
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>SearchFieldX</code></h3>
+<p>Default Value: <code>20</code></p>
+<p>Unit: Pixels</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>X-size (width) in which the reference is searched.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the alignment is one of the steps using a lot of computation time, 
+ the search field should be as small as possible.
+ The calculation time goes quadratic with the search field size.</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex8">
+			<td class="indent1">
+				<class id="Alignment_SearchFieldY_text" style="color:black;">Search Field Y</class>
+			</td>
+			<td>
+				<input required type="number" name="name" id="Alignment_SearchFieldY_value1" size="13" min="1"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Pixel
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>SearchFieldY</code></h3>
+<p>Default Value: <code>20</code></p>
+<p>Unit: Pixels</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Y-size (height) in which the reference is searched.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the alignment is one of the steps using a lot of computation time, 
+ the search field should be as small as possible.
+ The calculation time goes quadratic with the search field size.</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="AlignmentAlgo_ex8">
+			<td class="indent1">
+				<input type="checkbox" id="Alignment_AlignmentAlgo_enabled" value="1"  onclick = 'InvertEnableItem("Alignment", "AlignmentAlgo")' unchecked >
+				<label for=Alignment_AlignmentAlgo_enabled><class id="Alignment_AlignmentAlgo_text" style="color:black;">Alignment Algorithm</class></label>
+			</td>
+			<td>
+				<select id="Alignment_AlignmentAlgo_value1">
+					<option value="default" selected>Default</option>
+					<option value="highAccuracy" >HighAccuracy</option>
+					<option value="fast" >Fast</option>
+					<option value="off" >Off</option><!-- add disable aligment algo |01.2023 -->
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>AlignmentAlgo</code></h3>
+<p>Default Value: <code>Default</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Algorithm used for the alignment step.</p>
+<p>Available options:</p>
+<ul>
+<li><code>Default</code>: Use only red color channel</li>
+<li><code>HighAccuracy</code>: Use all 3 color channels (3x slower)</li>
+<li><code>Fast</code>: First time use <code>HighAccuracy</code>, then only check if the image is shifted</li>
+<li><code>Off</code>: Disable alignment algorithm</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex13">
+			<td class="indent1">
+			    <class id="Alignment_FlipImageSize_text" style="color:black;">Flip Image Size</class>
+			</td>
+			<td>
+				<select id="Alignment_FlipImageSize_value1">
+					<option value="true">true</option>
+					<option value="false" selected>false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>FlipImageSize</code></h3>
+<p>Default Value: <code>false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>This parameter can be used to rotate the viewport together with the alignment rotation:
+<img alt="" src="/flipImageSize.png" /> </p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex13">
+			<td class="indent1">
+			    <class id="Alignment_InitialMirror_text" style="color:black;">Initial Mirror</class>
+			</td>
+			<td>
+				<select id="Alignment_InitialMirror_value1">
+					<option value="true">true</option>
+					<option value="false" selected>false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>InitialMirror</code></h3>
+<p>Default Value: <code>false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter can also be set on the Reference Image configuration.</p>
+</div>
+<p>Option for initially mirroring the image on the original x-axis.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Digit ROIs ------------------>
+		<tr style="border-bottom: 2px solid lightgray;" id="Category_Digits_ex4">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+				<h4><input type="checkbox" id="Category_Digits_enabled" value="1"  onclick ='UpdateAfterCategoryCheck()' unchecked >
+				<label for=Category_Digits_enabled>Digit ROI Processing</label></h4>
+			</td>
+		</tr>
+
+		<tr class="DigitItem">
+			<td class="indent1" >
+				<class id="Digits_Model_text" style="color:black;">Model</class>
+			</td>
+			<td>
+				<select required class="select_large" id="Digits_Model_value1">
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Model</code></h3>
+<p>Default Value: <code>/config/dig-cont_*.tflite</code></p>
+    </span></div></div>
+</td>
+		</tr>
+		
+		<tr class="DigitItem expert"  id="ex91">
+			<td class="indent1">
+				<input type="checkbox" id="Digits_CNNGoodThreshold_enabled" value="1"  onclick = 'InvertEnableItem("Digits", "CNNGoodThreshold")' unchecked >
+				<label for=Digits_CNNGoodThreshold_enabled><class id="Digits_CNNGoodThreshold_text" style="color:black;">CNN Good Threshold</class></label>
+			</td>
+			<td>
+				<input required type="number" id="Digits_CNNGoodThreshold_value1" min="0" max="1" step="0.1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.rangeOverflow||(value=1)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>CNNGoodThreshold</code></h3>
+<p>Default Value: <code>0.5</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Threshold above which the classification should be to accept the value (only meaningful for digits).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is only supported for the <code>dig-class100</code> models!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="DigitItem">
+			<td class="indent1">
+				<input type="checkbox" id="Digits_ROIImagesLocation_enabled" value="1"  onclick = 'InvertEnableItem("Digits", "ROIImagesLocation")' unchecked >
+				<label for=Digits_ROIImagesLocation_enabled><class id="Digits_ROIImagesLocation_text" style="color:black;">ROI Images Location</class></label>
+			</td>
+			<td>
+				<input required type="text" name="name" id="Digits_ROIImagesLocation_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ROIImagesLocation</code></h3>
+<p>Default Value: <code>/log/digit</code></p>
+<p>Location to store separated digit images on the SD-Card.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A SD-Card has limited write cycles. Since the device does not do <a target=_blank href="https://en.wikipedia.org/wiki/Wear_leveling">Wear Leveling</a>, this can wear out your SD-Card!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="DigitItem">
+			<td class="indent1">
+				<input type="checkbox" id="Digits_ROIImagesRetention_enabled" value="1"  onclick = 'InvertEnableItem("Digits", "ROIImagesRetention")' unchecked >
+				<label for=Digits_ROIImagesRetention_enabled><class id="Digits_ROIImagesRetention_text" style="color:black;">ROI Images Retention</class></label>
+			</td>
+			<td>
+				<input required type="number" id="Digits_ROIImagesRetention_value1" min="0"  step="1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Days
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ROIImagesRetention</code></h3>
+<p>Default Value: <code>3</code></p>
+<p>Unit: Days</p>
+<p>Days to keep the separated digit images (<code>0</code> = forever).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Ananlog ROIs ------------------>
+		<tr style="border-bottom: 2px solid lightgray;" id="Category_Analog_ex4">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+				<h4><input type="checkbox" id="Category_Analog_enabled" value="1"  onclick = 'UpdateAfterCategoryCheck()' unchecked >
+				<label for=Category_Analog_enabled>Analog ROI Processing</label></h4>
+			</td>
+		</tr>
+
+		<tr class="AnalogItem">
+			<td class="indent1">
+			    <class id="Analog_Model_text" style="color:black;">Model</class>
+			</td>
+			<td> 
+				<select required class="select_large" id="Analog_Model_value1">
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Model</code></h3>
+<p>Default Value: <code>/config/ana-cont_*.tflite</code> </p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="AnalogItem">
+			<td class="indent1">
+				<input type="checkbox" id="Analog_ROIImagesLocation_enabled" value="1"  onclick = 'InvertEnableItem("Analog", "ROIImagesLocation")' unchecked >
+				<label for=Analog_ROIImagesLocation_enabled><class id="Analog_ROIImagesLocation_text" style="color:black;">ROI Images Location</class>
+				</label>
+			</td>
+			<td> <input required type="text" name="name" id="Analog_ROIImagesLocation_value1"> </td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ROIImagesLocation</code></h3>
+<p>Default Value: <code>/log/analog</code></p>
+<p>Location to store separated analog images on the SD-Card.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A SD-Card has limited write cycles. Since the device does not do <a target=_blank href="https://en.wikipedia.org/wiki/Wear_leveling">Wear Leveling</a>, this can wear out your SD-Card!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="AnalogItem">
+			<td class="indent1">
+				<input type="checkbox" id="Analog_ROIImagesRetention_enabled" value="1"  onclick = 'InvertEnableItem("Analog", "ROIImagesRetention")' unchecked >
+				<label for=Analog_ROIImagesRetention_enabled><class id="Analog_ROIImagesRetention_text" style="color:black;">ROI Images Retention</class></label></td>
+			<td> 
+				<input required type="number" id="Analog_ROIImagesRetention_value1" min="0" step="1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Days
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ROIImagesRetention</code></h3>
+<p>Default Value: <code>3</code></p>
+<p>Unit: Days</p>
+<p>Days to keep the separated analog images (<code>0</code> = forever).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Post-Processing ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Post-Processing</h4></td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<label><class id="PostProcessing_PreValueUse_text" style="color:black;">Previous Value</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_PreValueUse_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>PreValueUse</code></h3>
+<p>Default Value: <code>true</code></p>
+<p>Use the previous value (value from previous round) for consistency checks.
+This also works through a reboot of the device!</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex11">
+			<td class="indent1">
+				<input type="checkbox" id="PostProcessing_PreValueAgeStartup_enabled" value="1"  onclick = 'InvertEnableItem("PostProcessing", "PreValueAgeStartup")' unchecked >
+				<label for=PostProcessing_PreValueAgeStartup_enabled><class id="PostProcessing_PreValueAgeStartup_text" style="color:black;">Maximum Age of Previous Value after Startup</class></label>
+			</td>
+			<td>
+				<input required type="number" id="PostProcessing_PreValueAgeStartup_value1" size="13" min="0"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Seconds
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>PreValueAgeStartup</code></h3>
+<p>Default Value: <code>720</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Time in minutes, how long a previous read value is valid after reboot.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex12">
+			<td class="indent1">
+				<label><class id="PostProcessing_ErrorMessage_text" style="color:black;">Skip Messages on Error</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_ErrorMessage_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ErrorMessage</code></h3>
+<p>Default Value: <code>true</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Do not show error message in return value.
+In an error case, the last valid number will be used for the various transmission protocols (MQTT, InfluxDB, REST, ...).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert" id="ex1dddd">
+			<td class="indent1">
+				<label><class id="PostProcessing_CheckDigitIncreaseConsistency_text" style="color:black;">Check Digit Increase Consistency</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_CheckDigitIncreaseConsistency_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>CheckDigitIncreaseConsistency</code></h3>
+<p>Default Value: <code>false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>An additional consistency check.
+It especially improves the zero crossing check between digits.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr style="margin-top:12px">
+			<td class="indent1" style="padding-top:25px" colspan="3">
+				<b>Parameter per number sequence:</b>
+                <select 
+					style="font-weight: bold; margin-left:17px" id="Numbers_value1" onchange="numberChanged()">
+				</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<label><class id="PostProcessing_AllowNegativeRates_text" style="color:black;">Allow Negative Rates</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_AllowNegativeRates_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBERS&gt;.AllowNegativeRates</code></h3>
+<p>Default Value: <code>false</code></p>
+<p>Allow a meter to count backwards (decreasing values).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is unusual (it means there is a negative rate) and not wanted in most cases!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<input type="checkbox" id="PostProcessing_DecimalShift_enabled" value="1"  onclick = 'InvertEnableItem("PostProcessing", "DecimalShift")' unchecked >
+				<label for=PostProcessing_DecimalShift_enabled><class id="PostProcessing_DecimalShift_text" style="color:black;">Decimal Shift</class></label>
+			</td>
+			<td>
+				<input required type="number" id="PostProcessing_DecimalShift_value1" value="0" step="1" min="-9" max="9"
+					oninput="(!validity.rangeUnderflow||(value=-9)) && (!validity.rangeOverflow||(value=9)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.DecimalShift</code></h3>
+<p>Default Value: <code>0</code></p>
+<p>Shift the decimal separator (positiv or negativ).
+Eg. to move from <code>m³</code> to <code>liter</code> (<code>1 m³</code> equals <code>1000 liters</code>), you need to set it to <code>+3</code>.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<input type="checkbox" id="PostProcessing_AnalogDigitalTransitionStart_enabled" value="1"  onclick = 'InvertEnableItem("PostProcessing", "AnalogDigitalTransitionStart")' unchecked >
+				<label for=PostProcessing_AnalogDigitalTransitionStart_enabled><class id="PostProcessing_AnalogDigitalTransitionStart_text" style="color:black;">Analog/Digital Transition Start</class></label>
+			</td>
+			<td>
+				<input required type="number" id="PostProcessing_AnalogDigitalTransitionStart_value1" step="0.1" min="6.0" max="9.9" value="9.2"
+					oninput="(!validity.rangeUnderflow||(value=6.0)) && (!validity.rangeOverflow||(value=9.9)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.AnalogDigitalTransitionStart</code></h3>
+<p>Default Value: <code>9.2</code></p>
+<p>This can be used if you have wrong values, but the recognition of the individual ROIs are correct.
+Look for the start of changing of the first digit and note the analog pointer value behind.
+Set it here. Only used on combination of digits and analog pointers.
+</p>
+<p>Range: <code>6.0</code> .. <code>9.9</code>.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<input type="checkbox" id="PostProcessing_MaxRateValue_enabled" value="1"  onclick = 'InvertEnableItem("PostProcessing", "MaxRateValue")' unchecked >
+				<label for=PostProcessing_MaxRateValue_enabled><class id="PostProcessing_MaxRateValue_text" style="color:black;">Maximum Rate Value</class></label>
+			</td>
+			<td>
+				<input required type="number" id="PostProcessing_MaxRateValue_value1" size="13" min="0" step="any"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.MaxRateValue</code></h3>
+<p>Default Value: <code>0,05</code></p>
+<p>Maximum allowed change between two readings, if exceeded the last reading will be rejected. Depending on the settings of <code>&lt;NUMBER&gt;.MaxRateType</code> the <code>MaxRateValue</code> is either treated as the difference between the two measurements (<code>AbsoluteChange</code> = difference) not taking the set time interval into account or as the difference normalized to the interval (<code>RateChange</code> = difference per minute).</p>
+<p>If negative rate is disallowed and no maximum rate value is set, one false high reading will lead to a period of missing measurements until the measurement reaches the previous false high reading. E.g. if the counter is at <code>600,00</code> and it's read incorrectly as<code>610,00</code>, all measurements will be skipped until the counter reaches <code>610,00</code>. Setting the MaxRateValue to <code>0,05</code> leads to a rejection of all readings with a difference <code>&gt; 0,05</code>, in this case <code>610,00</code>. The rejection also applies to correct readings with a difference <code>&gt; 0,05</code>!</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<input type="checkbox" id="PostProcessing_MaxRateType_enabled" value="1"  onclick = 'InvertEnableItem("PostProcessing", "MaxRateType")' unchecked >
+				<label for=PostProcessing_MaxRateType_enabled><class id="PostProcessing_MaxRateType_text" style="color:black;">Maximum Rate Type</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_MaxRateType_value1">
+					<option value="AbsoluteChange" >AbsoluteChange</option>
+					<option value="RateChange" selected>RateChange</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.MaxRateType</code></h3>
+<p>Default Value: <code>AbsoluteChange</code></p>
+<p>Defines if the <strong>Change Rate</strong> is calculated as the difference between the last two readings (<code>AbsoluteChange</code> = difference) or
+as the difference normalized to the interval (<code>RateChange</code> = difference per minute).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent2">
+				<label><class id="PostProcessing_ExtendedResolution_text" style="color:black;">Extended Resolution</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_ExtendedResolution_value1">
+					<option value="true" >true</option>
+					<option value="false" selected>false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.ExtendedResolution</code></h3>
+<p>Default Value: <code>false</code></p>
+<p>Use the decimal place of the last analog counter for increased accuracy.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter is only supported on the <code>*-class*</code> and <code>*-const</code> models!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td id="ex121" class="indent2">
+				<label><class id="PostProcessing_IgnoreLeadingNaN_text" style="color:black;">Ignore Leading NaNs</class></label>
+			</td>
+			<td>
+				<select id="PostProcessing_IgnoreLeadingNaN_value1">
+					<option value="true" >true</option>
+					<option value="false" selected>false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.IgnoreLeadingNaN</code></h3>
+<p>Default Value: <code>true</code></p>
+<p>Leading <code>N</code>'s will be deleted before further processing.
+This is only relevant for models which use <code>N</code>!
+</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- MQTT ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+			    <h4>
+				<input type="checkbox" id="Category_MQTT_enabled" value="1"  onclick = 'UpdateAfterCategoryCheck()' unchecked >
+				<label for=Category_MQTT_enabled>MQTT</label>
+			    </h4>
+			</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<input type="checkbox" id="MQTT_Uri_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "Uri")' unchecked >
+				<label for=MQTT_Uri_enabled><class id="MQTT_Uri_text" style="color:black;">URI</class></label>
+			</td>
+			<td>
+				<input required type="text" id="MQTT_Uri_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Uri</code></h3>
+<p>Default Value: <code>mqtt://IP-ADRESS:1883</code></p>
+<p>URI to the MQTT broker including the port. E.g. <code>mqtt://192.168.1.1:1883</code>.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<input type="checkbox" id="MQTT_MainTopic_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "MainTopic")' unchecked >
+				<label for=MQTT_MainTopic_enabled><class id="MQTT_MainTopic_text" style="color:black;">Main Topic</class></label>
+			</td>
+			<td>
+				<input required type="text" id="MQTT_MainTopic_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>MainTopic</code></h3>
+<p>Default Value: <code>watermeter</code></p>
+<p>MQTT main topic, under which the counters are published.</p>
+<p>The single value will be published with the following key: <code>MAINTOPIC/NUMBER/RESULT_TOPIC</code></p>
+<p>With:</p>
+<ul>
+<li><code>NUMBER</code>: The name of the value (a meter might have more than one value). 
+  The names get defined in the analog and digital ROI configuration (defaults to <code>main</code>).</li>
+<li><code>RESULT_TOPIC</code>: Automatically filled with the right name, eg. <code>value</code>, <code>rate</code>, <code>timestamp</code>, <code>error</code>, ....</li>
+</ul>
+<p>The general connection status can be found in <code>MAINTOPIC/CONNECTION</code>. 
+</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<input type="checkbox" id="MQTT_ClientID_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "ClientID")' unchecked >
+				<label for=MQTT_ClientID_enabled><class id="MQTT_ClientID_text" style="color:black;">Client ID</class></label>
+			</td>
+			<td>
+				<input required type="text" id="MQTT_ClientID_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>ClientID</code></h3>
+<p>Default Value: <code>watermeter</code></p>
+<p>Client ID used to connect to the MQTT broker.
+If disabled, the <code>hostname</code> will be used.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<input type="checkbox" id="MQTT_user_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "user")' unchecked >
+				<label for=MQTT_user_enabled><class id="MQTT_user_text" style="color:black;">Username</class></label>
+			</td>
+			<td>
+				<input type="text" id="MQTT_user_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>user</code></h3>
+<p>Default Value: <code>USERNAME</code></p>
+<p>Username for MQTT authentication.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<input type="checkbox" id="MQTT_password_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "password")' unchecked >
+				<label for=MQTT_password_enabled><class id="MQTT_password_text" style="color:black;">Password</class></label>
+			</td>
+			<td>
+				<input type="text" id="MQTT_password_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>password</code></h3>
+<p>Default Value: <code>PASSWORD</code></p>
+<p>Password for MQTT authentication.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1">
+				<label><class id="MQTT_RetainMessages_text" style="color:black;">Retain Messages</class></label>
+			</td>
+			<td>
+				<select id="MQTT_RetainMessages_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>RetainMessages</code></h3>
+<p>Default Value: <code>true</code></p>
+<p>Enable or disable the <a target=_blank href="https://www.hivemq.com/blog/mqtt-essentials-part-8-retained-messages/">Retain Flag</a> for all MQTT entries.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent1" style="padding-top:25px" colspan="2">
+				<b>Homeassistant Discovery (using MQTT)</b><br>
+					If activated, the discovery topics gets automatically scheduled to sent once after device startup during state "Publish to MQTT".
+					To schedule a retransmission: Use "Manual Control > Resend HA Discovery" or call REST API: 
+					<a href=mqtt_publish_discovery target="_blank">http://&lt;IP&gt;/mqtt_publish_discovery</a>
+			</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent2">
+				<label><class id="MQTT_HomeassistantDiscovery_text" style="color:black;">Homeassistant Discovery</class></label>
+			</td>
+			<td>
+				<select id="MQTT_HomeassistantDiscovery_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>HomeassistantDiscovery</code></h3>
+<p>Default Value: <code>true</code></p>
+<p>Enable or disable the Homeassistant Discovery.
+</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="MQTTItem">
+			<td class="indent2">
+				<input type="checkbox" id="MQTT_MeterType_enabled" value="1"  onclick = 'InvertEnableItem("MQTT", "MeterType")' unchecked >
+				<label for=MQTT_MeterType_enabled><class id="MQTT_MeterType_text" style="color:black;">Meter Type</class></label>
+			</td>
+			<td>
+				<select class="select_large" id="MQTT_MeterType_value1"> <!-- See https://developers.home-assistant.io/docs/core/entity/sensor/#available-device-classes -->
+					<option value="other" selected>Other (no Units)</option>
+					<option value="water_m3">Watermeter (Value: m³, Rate: m³/h)</option>
+					<option value="water_l">Watermeter (Value: l, Rate: l/h)</option>
+					<option value="water_gal">Watermeter (Value: gal, Rate: gal/h)</option>
+					<option value="water_ft3">Watermeter (Value: ft³, Rate: ft³/m)</option>
+					<option value="gas_m3">Gasmeter (Value: m³, Rate: m³/h)</option>
+					<option value="gas_ft3">Gasmeter (Value: ft³, Rate: ft³/m)</option>
+					<option value="energy_wh">Energymeter (Value: Wh, Rate: W)</option>
+					<option value="energy_kwh">Energymeter (Value: kWh, Rate: kW)</option>
+					<option value="energy_mwh">Energymeter (Value: MWh, Rate: MW)</option>
+					<option value="energy_gj">Energymeter (Value: GJ, Rate: GJ/h)</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>MeterType</code></h3>
+<p>Default Value: <code>other</code></p>
+<p>Select the Meter Type so the sensors have the right units in Homeassistant.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <code>Watermeter</code> you need to have Homeassistant 2022.11 or newer!</p>
+</div>
+<p>Please also make sure that the selected Meter Type matches the dimension of the value provided by the meter!
+Eg. if your meter provides <code>m³</code>, you need to also set it to <code>m³</code>.
+Alternatively you can set the parameter <code>DecimalShift</code> to <code>3</code> so the value is converted to <code>liters</code>!</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		
+		<!------------- INFLUXDB v1 ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+			    <h4>
+				<input type="checkbox" id="Category_InfluxDB_enabled" value="1"  onclick = 'UpdateAfterCategoryCheck()' unchecked >
+				<label for=Category_InfluxDB_enabled>InfluxDB v1.x</label></h4>
+			</td>
+		</tr>
+		
+		<tr class="InfluxDBv1Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDB_Uri_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "Uri")' unchecked >
+				<label for=InfluxDB_Uri_enabled><class id="InfluxDB_Uri_text" style="color:black;">URI</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDB_Uri_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Uri</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>URI of the HTTP interface to InfluxDB v1, without trailing slash, e.g. <code>http://192.168.1.1:8086</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See section <code>InfluxDBv2</code> for InfluxDB v2 support! </p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+        <tr class="InfluxDBv1Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDB_Database_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "Database")' unchecked >
+				<label for=InfluxDB_Database_enabled><class id="InfluxDB_Database_text" style="color:black;">Database</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDB_Database_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Database</code></h3>
+<p>Default Value: <code>''</code></p>
+<p>Name of the InfluxDB v1 Database into which to publish the values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See section <code>InfluxDBv2</code> for InfluxDB v2 support! </p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv1Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDB_user_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "user")' unchecked >
+				<label for=InfluxDB_user_enabled><class id="InfluxDB_user_text" style="color:black;">Username</class></label>
+			</td>
+			<td>
+				<input type="text" id="InfluxDB_user_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>user</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Username for the InfluxDB v1 authentication.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See section <code>InfluxDBv2</code> for InfluxDB v2 support! </p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv1Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDB_password_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "password")' unchecked >
+				<label for=InfluxDB_password_enabled><class id="InfluxDB_password_text" style="color:black;">Password</class></label>
+			</td>
+			<td>
+				<input type="text" id="InfluxDB_password_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>password</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Password for the InfluxDB v1 authentication.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See section <code>InfluxDBv2</code> for InfluxDB v2 support! </p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv1Item" style="margin-top:12px">
+			<td class="indent1" style="padding-top:25px" colspan="3">
+				<b>Parameter per number sequence:</b>
+                <select
+					style="font-weight: bold; margin-left:17px" id="NumbersInfluxDB_value1" onchange="numberInfluxDBChanged()">
+                </select>
+			</td>
+		</tr>
+		
+		<tr class="InfluxDBv1Item">
+			<td class="indent2">
+				<input type="checkbox" id="InfluxDB_Measurement_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "Measurement")' unchecked >
+				<label for=InfluxDB_Measurement_enabled><class id="InfluxDB_Measurement_text" style="color:black;">Measurement</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDB_Measurement_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Measurement</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Name of the InfluxDB v1 Measurement to use to publish the value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See section <code>InfluxDBv2</code> for InfluxDB v2 support! </p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv1Item">
+			<td class="indent2">
+				<input type="checkbox" id="InfluxDB_Field_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDB", "Field")' unchecked >
+				<label for=InfluxDB_Field_enabled><class id="InfluxDB_Field_text" style="color:black;">Field</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDB_Field_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.Field</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Dedicated definition of the field for InfluxDB use for saving in the Influx database (e.g.: "watermeter/value").</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- INFLUXDB v2 ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+			    <h4>
+				<input type="checkbox" id="Category_InfluxDBv2_enabled" value="1"  onclick = 'UpdateAfterCategoryCheck()' unchecked >
+				<label for=Category_InfluxDBv2_enabled>InfluxDB v2.x</label></h4>		
+			</td>
+		</tr>
+
+		<tr class="InfluxDBv2Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDBv2_Uri_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Uri")' unchecked >
+				<label for=InfluxDBv2_Uri_enabled><class id="InfluxDBv2_Uri_text" style="color:black;">URI</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDBv2_Uri_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Uri</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>URI of the HTTP interface to InfluxDB v2, without trailing slash, e.g. <code>http://192.168.1.1:8086</code>.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+        <tr class="InfluxDBv2Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDBv2_Database_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Database")' unchecked >
+				<label for=InfluxDBv2_Database_enabled><class id="InfluxDBv2_Database_text" style="color:black;">Database</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDBv2_Database_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Database</code></h3>
+<p>Default Value: <code>''</code></p>
+<p>Name of the InfluxDB v2 Database into which to publish the values.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv2Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDBv2_Org_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Org")' unchecked >
+				<label for=InfluxDBv2_Org_enabled><class id="InfluxDBv2_Org_text" style="color:black;">Organization (Org)</class></label>
+			</td>
+			<td>
+				<input type="text" id="InfluxDBv2_Org_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Org</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Organisation (Org) for InfluxDB v2 authentication</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv2Item">
+			<td class="indent1">
+				<input type="checkbox" id="InfluxDBv2_Token_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Token")' unchecked >
+				<label for=InfluxDBv2_Token_enabled><class id="InfluxDBv2_Token_text" style="color:black;">Token</class></label>
+			</td>
+			<td>
+				<input type="text" id="InfluxDBv2_Token_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Token</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Token for InfluxDB v2 authentication</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="InfluxDBv2Item" style="margin-top:12px">
+			<td class="indent1" style="padding-top:25px" colspan="3">
+				<b>Parameter per number sequence:</b>
+                <select
+					style="font-weight: bold; margin-left:17px" id="NumbersInfluxDBv2_value1" onchange="numberInfluxDBv2Changed()">
+                </select>
+			</td>
+		</tr>
+
+		<tr class="InfluxDBv2Item">
+			<td class="indent2">
+				<input type="checkbox" id="InfluxDBv2_Measurement_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Measurement")' unchecked >
+				<label for=InfluxDBv2_Measurement_enabled><class id="InfluxDBv2_Measurement_text" style="color:black;">Measurement</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDBv2_Measurement_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Measurement</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Name of the InfluxDB v2 Measurement to use to publish the value.</p>
+    </span></div></div>
+</td>
+		</tr>
+		
+		<tr class="InfluxDBv2Item">
+			<td class="indent2">
+				<input type="checkbox" id="InfluxDBv2_Field_enabled" value="1"  onclick = 'InvertEnableItem("InfluxDBv2", "Field")' unchecked >
+				<label for=InfluxDBv2_Field_enabled><class id="InfluxDBv2_Field_text" style="color:black;">Field</class></label>
+			</td>
+			<td>
+				<input required type="text" id="InfluxDBv2_Field_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>&lt;NUMBER&gt;.Field</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<p>Field for InfluxDB v2 to use for saving.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- GPIO ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;">
+				<h4><input type="checkbox" id="Category_GPIO_enabled" value="1"  onclick='UpdateAfterCategoryCheck()' unchecked > 
+				    <label for=Category_GPIO_enabled>GPIO (General Purpose Input / Output)</label></h4>
+			</td>
+		</tr>
+
+		<!------------- GPIO0 begin ------------------>
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO0_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO0")' unchecked>
+				<label for=GPIO_IO0_enabled><span id="GPIO_IO0_text">GPIO0 Configuration</span></label>
+			</td>
+			<td>
+					<select id="GPIO_IO0_value1">
+						<option value="input">input</option>
+						<option value="input-pullup">input pullup</option>
+						<option value="input-pulldown">input pulldown</option>
+						<option value="output">output</option>
+					</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO0</code></h3>
+<p>Default Value: <code>input disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO0</code> pin.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This pin is only usable with restrictions!
+It must be disabled when the camera is used.
+Additionally, it is used to activate Bootloader mode and must therefore be HIGH after a reset!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 0 state</code>: One of <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 0 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 0 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 0 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 0 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 0 name</code>: MQTT topic name (empty = <code>GPIO0</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent2">
+				<span id="GPIO_IO0_text" class="GPIO_IO0 GPIO_item">GPIO0 Use Interrupt</span>
+			</td>
+			<td>
+					<select id="GPIO_IO0_value2">
+						<option value="disabled">disabled</option>
+						<option value="rising-edge">rising edge</option>
+						<option value="falling-edge">falling edge</option>
+						<option value="rising-and-falling">rising and falling</option>
+						<option value="low-level-trigger">low level trigger</option>
+						<option value="high-level-trigger">high level trigger</option>
+					</select>	
+				</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO0 GPIO_item">GPIO0 PWM Duty Cycle Resolution</span>
+			</td>
+			<td>
+				<input required type="number" id="GPIO_IO0_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO0 GPIO_item">Bits</span>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO0 GPIO_item">GPIO0 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO0_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO0 GPIO_item">GPIO0 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO0_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO0 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO0 GPIO_item">GPIO0 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO0_value6"></td>
+			<td></td>
+		</tr>
+		<!------------- GPIO0 end ------------------>
+
+		<!------------- GPIO1 begin ------------------>
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO1_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO1")' unchecked>
+				<label for=GPIO_IO1_enabled><span id="GPIO_IO1_text">GPIO1 Configuration</span></label>
+			</td>
+			<td>
+					<select id="GPIO_IO1_value1">
+						<option value="input">input</option>
+						<option value="input-pullup">input pullup</option>
+						<option value="input-pulldown">input pulldown</option>
+						<option value="output">output</option>
+					</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO1</code></h3>
+<p>Default Value: <code>input disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO1</code> pin.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This pin is by default used for the serial communication as TX pin (USB logging)!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 1 state</code>: One of <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 1 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 1 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 1 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 1 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 1 name</code>: MQTT topic name (empty = <code>GPIO1</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO1 GPIO_item" class="expert">GPIO1 Use Interrupt</span>
+			</td>
+			<td>
+				<select id="GPIO_IO1_value2">
+					<option value="disabled">disabled</option>
+					<option value="rising-edge" disabled>rising edge</option>
+					<option value="falling-edge" disabled>falling edge</option>
+					<option value="rising-and-falling">rising and falling</option>
+					<option value="low-level-trigger">low level trigger</option>
+					<option value="high-level-trigger">high level trigger</option>
+				</select>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO1 GPIO_item">GPIO1 PWM Duty Cycle Resolution</span>
+			</td>
+			<td><input required type="number" id="GPIO_IO1_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO1 GPIO_item">Bits</span>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO1 GPIO_item">GPIO1 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO1_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO1 GPIO_item">GPIO1 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO1_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO1 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO1 GPIO_item" class="expert">GPIO1 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO1_value6"></td>
+			<td></td>
+		</tr>
+		<!------------- GPIO1 end ------------------>
+
+		<!------------- GPIO3 begin ------------------>
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO3_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO3")' unchecked>
+				<label for=GPIO_IO3_enabled><span id="GPIO_IO3_text">GPIO3 Configuration</span></label>
+			</td>
+			<td>
+				<select id="GPIO_IO3_value1">
+					<option value="input">input</option>
+					<option value="input-pullup">input pullup</option>
+					<option value="input-pulldown">input pulldown</option>
+					<option value="output">output</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO3</code></h3>
+<p>Default Value: <code>input disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO3</code> pin.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This pin is by default used for the serial communication as RX pin (USB logging)!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 3 state</code>: One of <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 3 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 3 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 3 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 3 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 3 name</code>: MQTT topic name (empty = <code>GPIO3</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO3 GPIO_item">GPIO3 Use Interrupt</span>
+			</td>
+			<td>
+				<select id="GPIO_IO3_value2">
+					<option value="disabled">disabled</option>
+					<option value="rising-edge" disabled>rising edge</option>
+					<option value="falling-edge" disabled>falling edge</option>
+					<option value="rising-and-falling">rising and falling</option>
+					<option value="low-level-trigger">low level trigger</option>
+					<option value="high-level-trigger">high level trigger</option>
+				</select>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO3 GPIO_item">GPIO3 PWM Duty Cycle Resolution</span>
+			</td>
+			<td><input required type="number" id="GPIO_IO3_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO3 GPIO_item">Bits</span>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO3 GPIO_item">GPIO3 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO3_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO3 GPIO_item">GPIO3 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO3_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO3 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO3 GPIO_item">GPIO3 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO3_value6"></td>
+			<td></td>
+		</tr>
+		<!------------- GPIO3 end ------------------>
+
+		<!------------- GPIO4 begin ------------------>
+		<tr class="GPIO_item" style="border-bottom: 0px;">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO4_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO4")' checked>
+				<label for=GPIO_IO4_enabled><span id="GPIO_IO4_text">GPIO4 Configuration</span></label>
+			</td>
+			<td>
+				<select id="GPIO_IO4_value1">
+					<option value="input">input</option>
+					<option value="input-pullup">input pullup</option>
+					<option value="input-pulldown">input pulldown</option>
+					<option value="output">output</option>
+					<option value="built-in-led" select>built-in led flash light</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO4</code></h3>
+<p>Default Value: <code>built-in-led disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO4</code> pin.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This pin is only usable with restrictions!
+By default, it is used for build-in flash light (onboard LED).</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 4 state</code>: One of <code>built-in-led</code>, <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 4 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 4 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 4 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 4 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 4 name</code>: MQTT topic name (empty = <code>GPIO4</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+		<tr class="GPIO_item" style="border-top: 0px;">
+			<td colspan="2" style="padding-left:28px">
+				<b>IMPORTANT NOTE:</b><br>
+				If you'd like to use the built-in flash LED in parallel with other GPIO functionality,
+				you have to explicitely activate the "built-in LED flash light" option on GPIO4. The light 
+				intensity control (PWM) of the LED flash light is not functional anymore (only 100%).
+			</td>
+		</tr>
+		<tr class="GPIO_IO4 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO4 GPIO_item">GPIO4 Use Interrupt</span>
+			</td>
+			<td>
+				<select id="GPIO_IO4_value2">
+					<option value="disabled">disabled</option>
+					<option value="rising-edge">rising edge</option>
+					<option value="falling-edge">falling edge</option>
+					<option value="rising-and-falling">rising and falling</option>
+					<option value="low-level-trigger">low level trigger</option>
+					<option value="high-level-trigger">high level trigger</option>
+				</select>	
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO4 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO4 GPIO_item">GPIO4 PWM Duty Cycle Resolution</span>
+			</td>
+			<td><input required type="number" id="GPIO_IO4_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO4 GPIO_item">Bits</span>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO4 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO4 GPIO_item">GPIO4 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO4_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO4 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO4 GPIO_item">GPIO4 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO4_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO4 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO4 GPIO_item">GPIO4 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO4_value6"></td>
+			<td></td>
+		</tr>
+		<!------------- GPIO4 end ------------------>
+
+		<!------------- GPIO12 begin ------------------>
+		<tr class="GPIO_item">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO12_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO12")' unchecked>
+				<label for=GPIO_IO12_enabled><span id="GPIO_IO12_text">GPIO12 Configuration</span></label>
+			</td>
+			<td>
+				<select id="GPIO_IO12_value1">
+					<option value="input">input</option>
+					<option value="input-pullup">input pullup</option>
+					<option value="input-pulldown">input pulldown</option>
+					<option value="output">output</option>
+					<option value="external-flash-ws281x">external flash light ws281x controlled</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO12</code></h3>
+<p>Default Value: <code>input-pullup disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO12</code> pin.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This pin is usable without known restrictions!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 12 state</code>: One of <code>external-flash-ws281x</code>, <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 12 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 12 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 12 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 12 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 12 name</code>: MQTT topic name (empty = <code>GPIO12</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_IO12 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO12 GPIO_item">GPIO12 Use Interrupt</span>
+			</td>
+			<td>
+				<select class="GPIO_IO12 GPIO_item" id="GPIO_IO12_value2">
+					<option value="disabled">disabled</option>
+					<option value="rising-edge">rising edge</option>
+					<option value="falling-edge">falling edge</option>
+					<option value="rising-and-falling">rising and falling</option>
+					<option value="low-level-trigger">low level trigger</option>
+					<option value="high-level-trigger">high level trigger</option>
+				</select>	
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO12 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO12 GPIO_item">GPIO12 PWM Duty Cycle Resolution</span>
+			</td>
+			<td><input required type="number" id="GPIO_IO12_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO12 GPIO_item">Bits</span>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO12 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO12 GPIO_item">GPIO12 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO12_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO12 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO12 GPIO_item">GPIO12 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO12_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO12 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO12 GPIO_item">GPIO12 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO12_value6"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_item" id="wstypeex3">
+			<td class="indent1">
+				<span class="GPIO_IO12 GPIO_item" id="GPIO_LEDType_text">LED Type (NeoPixel)</span>
+			</td>
+			<td class="GPIO_item">
+				<select class="GPIO_item" id="GPIO_LEDType_value1">
+					<option value="WS2812" selected>WS2812</option>
+					<option value="WS2812B">WS2812B</option>
+					<option value="SK6812">SK6812</option>
+					<option value="WS2813">WS2813 (not tested)</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LEDType</code></h3>
+<p>Default Value: <code>WS2812</code>
+Type of the <code>WS2812x</code> which is connected to GPIO12 (See <code>IO12</code> parameter).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr  class="GPIO_item" id="LEDANZex8" >
+			<td class="indent1">
+				<span class="GPIO_item" id="GPIO_LEDNumbers_text">Numbers of LEDs</span>
+			</td>
+			<td>
+				<input required type="number" name="name" id="GPIO_LEDNumbers_value1" size="13" min="1"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LEDNumbers</code></h3>
+<p>Default Value: <code>2</code></p>
+<p>Number of LEDs on the external LED-stripe attached to GPIO12 (See <code>IO12</code> parameter).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_item" id="LEDRGBex9">
+			<td class="indent1">
+				<span class="GPIO_item" id="GPIO_LEDColor_text">LED Color</span>
+			</td>
+			<td class="GPIO_item">
+				R <input required style="min-width:35px;width:35px;" type="number" class="GPIO_IO12 GPIO_item" id="GPIO_LEDColor_value1"
+						size="12" min="0" max="255" step="1" oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.rangeOverflow||(value=255)) && 
+							(!validity.stepMismatch||(value=parseInt(this.value)));">
+				G <input required style="min-width:35px;width:35px" type="number" class="GPIO_IO12 GPIO_item" id="GPIO_LEDColor_value2"
+						size="12" min="0" max="255" step="1" oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.rangeOverflow||(value=255)) && 
+							(!validity.stepMismatch||(value=parseInt(this.value)));">
+				B <input required style="min-width:35px;width:35px" type="number" class="GPIO_IO12 GPIO_item" id="GPIO_LEDColor_value3"
+						size="12" min="0" max="255" step="1" oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.rangeOverflow||(value=255)) && 
+							(!validity.stepMismatch||(value=parseInt(this.value)));">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LEDColor</code></h3>
+<p>Default Value: <code>150 150 150</code></p>
+<p>Color of the attached LEDs to GPIO12 in <strong>R</strong>ed, <strong>G</strong>reen <strong>B</strong>lue from <code>0</code> (full off) .. <code>255</code> (full on) 
+(See <code>IO12</code> parameter).</p>
+    </span></div></div>
+</td>
+		</tr>
+		<!------------- GPIO12 end ------------------>
+
+		<!------------- GPIO13 begin ------------------>
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent1">
+				<input type="checkbox" id="GPIO_IO13_enabled" value="1"  onclick = 'InvertEnableItem("GPIO", "IO13")' unchecked>
+				<label for=GPIO_IO13_enabled><span id="GPIO_IO13_text">GPIO13 Configuration</span></label>
+			</td>
+			<td>
+					<select id="GPIO_IO13_value1">
+						<option value="input">input</option>
+						<option value="input-pullup">input pullup</option>
+						<option value="input-pulldown">input pulldown</option>
+						<option value="output">output</option>
+					</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>IO13</code></h3>
+<p>Default Value: <code>input-pullup disabled 10 false false</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter can be used to configure the GPIO <code>IO13</code> pin.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This pin is usable without known restrictions!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><code>GPIO 13 state</code>: One of <code>input</code>, <code>input pullup</code>, <code>input pulldown</code> or <code>output</code>.</li>
+<li><code>GPIO 13 use interrupt</code>: Enable interrupt trigger</li>
+<li><code>GPIO 13 PWM duty resolution</code>: LEDC PWM duty resolution in bit</li>
+<li><code>GPIO 13 enable MQTT</code>: Enable MQTT publishing/subscribing</li>
+<li><code>GPIO 13 enable HTTP</code>: Enable HTTP write/read</li>
+<li><code>GPIO 13 name</code>: MQTT topic name (empty = <code>GPIO13</code>). Allowed characters: <code>a-z, A-Z, 0-9, _, -</code>.</li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO13 GPIO_item">GPIO13 Use Interrupt</span>
+			</td>
+			<td>
+					<select id="GPIO_IO13_value2">
+						<option value="disabled">disabled</option>
+						<option value="rising-edge" disabled>rising edge</option>
+						<option value="falling-edge" disabled>falling edge</option>
+						<option value="rising-and-falling">rising and falling</option>
+						<option value="low-level-trigger">low level trigger</option>
+						<option value="high-level-trigger">high level trigger</option>
+					</select>	
+				</td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO13 GPIO_item">GPIO13 PWM Duty Cycle Resolution</span>
+			</td>
+			<td><input required type="number" id="GPIO_IO13_value3" min="1" max="20"
+					oninput="(!validity.rangeUnderflow||(value=1)) && (!validity.rangeOverflow||(value=20)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));"><span class="GPIO_IO13 GPIO_item">Bits</span></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO13 GPIO_item">GPIO13 Enable MQTT</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO13_value4"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO13 GPIO_item">GPIO13 Enable REST API</span>
+			</td>
+			<td><input type="checkbox" id="GPIO_IO13_value5"></td>
+			<td></td>
+		</tr>
+
+		<tr class="GPIO_IO13 GPIO_item expert">
+			<td class="indent2">
+				<span class="GPIO_IO13 GPIO_item">GPIO13 Name</span>
+			</td>
+			<td><input type="text" id="GPIO_IO13_value6"></td>
+			<td></td>
+		</tr>
+		<!------------- GPIO13 end ------------------>
+
+
+		<!------------- Autotimer ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Auto Timer</h4></td>
+		</tr>
+
+		<tr class="expert"  id="ex13">
+			<td class="indent1">
+			    <class id="AutoTimer_AutoStart_text" style="color:black;">Automatic Round Start</class>
+			</td>
+			<td>
+				<select id="AutoTimer_AutoStart_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>AutoStart</code></h3>
+<p>Default Value: <code>true</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Automatically start the Flow (Digitization Rounds) immediately after power up.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Typically this is set to <code>true</code>.
+The main reasons to set it to <code>false</code> is when you want to trigger it manually using the
+</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+			    <class id="AutoTimer_Interval_text" style="color:black;">Round Interval</class>
+			</td>
+			<td>
+				<input required type="number" id="AutoTimer_Interval_value1" size="13" min="1" step="any"
+					oninput="(!validity.rangeUnderflow||(value=1));">Minutes
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Interval</code></h3>
+<p>Default Value: <code>5</code></p>
+<p>Unit: Minutes</p>
+<p>Interval in which the Flow (Digitization Round) is run.
+If a round takes longer than this interval, the next round gets postponed until the current round completes.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Data Logging ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Data Logging</h4></td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<class id="DataLogging_DataLogActive_text" style="color:black;">Data Logging</class>
+			</td>
+			<td>
+				<select id="DataLogging_DataLogActive_value1">
+					<option value="true" selected>true</option>
+					<option value="false" >false</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>DataLogActive</code></h3>
+<p>Default Value: <code>true</code>
+Activate data logging to the SD-Card.</p>
+<p>The files will be stored in <code>/log/data/data_YYYY-MM-DD.csv</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A SD-Card has limited write cycles. Since the device does not do <a target=_blank href="https://en.wikipedia.org/wiki/Wear_leveling">Wear Leveling</a>, this can wear out your SD-Card!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<class id="DataLogging_DataFilesRetention_text" style="color:black;">Data Files Retention</class>
+			</td>
+			<td>
+				<input required type="number" id="DataLogging_DataFilesRetention_value1" size="13" min="0" step="1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Days
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>DataFilesRetention</code></h3>
+<p>Default Value: <code>3</code></p>
+<p>Unit: Days</p>
+<p>Number of days to keep the data files (<code>0</code> = forever).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+
+		<!------------- Debug Logging ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>Debug</h4></td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<class id="Debug_LogLevel_text" style="color:black;">Logfile Log Level</class>
+			</td>
+			<td>
+				<select id="Debug_LogLevel_value1">
+					<option value="1" selected>ERROR</option> <!-- matches esp_log_level_t -->
+					<option value="2">WARNING</option>
+					<option value="3">INFO</option>
+					<option value="4">DEBUG</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LogLevel</code></h3>
+<p>Default Value: <code>1</code> (<code>ERROR</code>)
+Define the log level for the logging to the SD-Card.</p>
+<p>Available options:</p>
+<ul>
+<li><code>1</code>: <code>ERROR</code></li>
+<li><code>2</code>: <code>WARNING</code></li>
+<li><code>3</code>: <code>INFO</code></li>
+<li><code>4</code>: <code>DEBUG</code></li>
+</ul>
+<p>As higher the level, as more log messages get written to the SD-Card.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>DEBUG</code> or <code>INFO</code> might damage the SD-Card if enabled long term due to excessive writes to the SD-Card!
+A SD-Card has limited write cycles. Since the device does not do <a target=_blank href="https://en.wikipedia.org/wiki/Wear_leveling">Wear Leveling</a>, this can wear out your SD-Card!</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<class id="Debug_LogfilesRetention_text" style="color:black;">Logfiles Retention</class>
+			</td>
+			<td>
+				<input required type="number" id="Debug_LogfilesRetention_value1" size="13" min="0" step="1"
+					oninput="(!validity.rangeUnderflow||(value=0)) && (!validity.stepMismatch||(value=parseInt(this.value)));">Days
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>LogfilesRetention</code></h3>
+<p>Default Value: <code>3</code></p>
+<p>Unit: Days</p>
+<p>Number of days to keep the log files (<code>0</code> = forever).</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<!------------- System ------------------>
+		<tr style="border-bottom: 2px solid lightgray;">
+			<td colspan="3" style="padding-left: 0px; padding-bottom: 3px;"><h4>System</h4></td>
+		</tr>
+
+		<tr>
+			<td class="indent1">
+				<input type="checkbox" id="System_TimeZone_enabled" value="1"  onclick = 'InvertEnableItem("System", "TimeZone")' unchecked >
+				<label for=System_TimeZone_enabled><class id="System_TimeZone_text" style="color:black;">Time Zone</class></label>
+				<p></p><p></p>
+			</td>
+			<td>
+				<input type="text" id="System_TimeZone_value1">
+				<p>Use <a href="timezones.html" target="_blank">timezones</a> to find your settings</p>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>TimeZone</code></h3>
+<p>Default Value: <code>CET-1CEST,M3.5.0,M10.5.0/3</code></p>
+<p>Time zone in POSIX syntax (Europe/Berlin = <code>CET-1CEST,M3.5.0,M10.5.0/3</code> - incl. daylight saving)
+Check the table on <code>http://&lt;DEVICE IP&gt;/timezones.html</code> to find the settings for your region.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="ex16">
+			<td class="indent1">
+				<input type="checkbox" id="System_TimeServer_enabled" value="1"  onclick = 'InvertEnableItem("System", "TimeServer")' unchecked >
+				<label for=System_TimeServer_enabled><class id="System_TimeServer_text" style="color:black;">Time Server (NTP)</class></label>
+			</td>
+			<td>
+				<input type="text" id="System_TimeServer_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>TimeServer</code></h3>
+<p>Default Value: <code>pool.ntp.org</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Time server to synchronize system time. If it is disabled or <code>undefined</code>, <code>pool.ntp.org</code> will be used.
+You can also set it to the IP of your router. Many routers like Fritzboxes can act as a local NTP server.
+To disable NTP, you need to activate it but set the TimeServer config to be empty (<code>""</code>).
+In such case the time always starts at <code>01.01.1970</code> after each power cycle!</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="System_Hostname">
+			<td class="indent1">
+				<input type="checkbox" id="System_Hostname_enabled" value="1"  onclick = 'InvertEnableItem("System", "Hostname")' unchecked >
+				<label for=System_Hostname_enabled><class id="System_Hostname_text" style="color:black;">Hostname</class></label>
+			</td>
+			<td>
+				<input type="text" id="System_Hostname_value1">
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>Hostname</code></h3>
+<p>Default Value: <code>undefined</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>Hostname for the device.
+It gets automatically transferred to <code>/wlan.ini</code> on the SD-Card at the next startup.</p>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="System_RSSIThreshold">
+			<td class="indent1">
+				<input type="checkbox" id="System_RSSIThreshold_enabled" value="1"  onclick = 'InvertEnableItem("System", "RSSIThreshold")' unchecked >
+				<label for=System_RSSIThreshold_enabled><class id="System_RSSIThreshold_text" style="color:black;">RSSI Threshold</class></label>
+			</td>
+			<td>
+				<input required type="number" name="name" id="System_RSSIThreshold_value1" min="-100" max="0" step="1"
+					oninput="(!validity.rangeUnderflow||(value=-100)) && (!validity.rangeOverflow||(value=0)) && 
+						(!validity.stepMismatch||(value=parseInt(this.value)));">dBm
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>RSSIThreshold</code></h3>
+<p>Default Value: <code>0</code></p>
+<p>Possible values: <code>-100</code> .. <code>0</code> (<code>0</code> = disabled).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an <strong>Expert Parameter</strong>! Only change it if you understand what it does!</p>
+</div>
+<p>This parameter activates a client triggered AP switching functionality (simplified roaming). 
+If actual RSSI value is lower (more negative) than <code>RSSIThreshold</code>, all WIFI channels will be scanned for configured access point SSID. If an access point is in range which has better RSSI value (less negative) than actual RSSI value + 5 dBm, the device is trying to connect to this access point with the better RSSI value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The RSSI check only gets initiated at the end of each round to avoid any disturbance of processing.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It gets automatically transferred to <code>/wlan.ini</code> on the SD-Card at next startup.</p>
+</div>
+    </span></div></div>
+</td>
+		</tr>
+
+		<tr class="expert"  id="System_CPUFrequency">
+			<td class="indent1">
+				<input type="checkbox" id="System_CPUFrequency_enabled" value="1"  onclick = 'InvertEnableItem("System", "CPUFrequency")' unchecked >
+				<label for=System_CPUFrequency_enabled><class id="System_CPUFrequency_text" style="color:black;">CPU Frequency</class></label>
+			</td>
+			<td>
+				<select id="System_CPUFrequency_value1">
+					<option value="160" selected>160 MHz</option>
+					<option value="240">240 MHz</option>
+				</select>
+			</td>
+			<td>
+    <div class="rst-content"><div class="tooltip"><img src="help.png" width="32px"><span class="tooltiptext">
+<h3 style="margin: 0">Parameter <code>CPUFrequency</code></h3>
+<p>Default Value: <code>160</code></p>
+<p>Set the CPU Frequency.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Setting it to 240 will lead to a faster device, but it will also require a stronger power supply!
+Additionally, depending on the quality of your devices, it might run unstable!</p>
+</div>
+<p>Possible values: </p>
+<ul>
+<li>160</li>
+<li>240 </li>
+</ul>
+    </span></div></div>
+</td>
+		</tr>
+
+	</table>
+
+	<table style="padding-top:10px">
+		<td>
+			<button class="button" onclick="saveTextAsFile()">Save Config</button>
+		</td>
+	    <td>
+	        <button class="button" id="reboot" type="button" onclick="doReboot()">Reboot to activate changes</button>
+		</td>
+	</table>
+</div>
+
+<script type="text/javascript" src="common.js?v=3fbff0a"></script> 
+<script type="text/javascript" src="readconfigcommon.js?v=3fbff0a"></script>  
+<script type="text/javascript" src="readconfigparam.js?v=3fbff0a"></script>  
+ 
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas'),
+		domainname = getDomainname(); 
+		param;
+		category;
+		NUNBERSAkt = -1;
+		NUMBERS;
+
+
+function LoadConfigNeu() {
+	domainname = getDomainname(); 
+	if (!loadConfig(domainname)) {
+		firework.launch('Configuration could not be loaded! Please reload the page!', 'danger', 30000);
+		return;
+	} 
+	ParseConfig();	
+	param = getConfigParameters();
+	category = getConfigCategory();
+	InitIndivParameter();
+
+	UpdateInput();
+	var sel = document.getElementById("Numbers_value1");
+	UpdateInputIndividual(sel);
+	UpdateExpertModus();
+	document.getElementById("divall").style.display = ''; 
+}
+
+
+function InitIndivParameter()
+{
+    NUMBERS = getNUMBERInfo();
+
+    var _index = document.getElementById("Numbers_value1");
+    while (_index.length)
+        _index.remove(0);
+
+    var _indexInflux = document.getElementById("NumbersInfluxDBv2_value1");
+    while (_indexInflux.length)
+        _indexInflux.remove(0);
+
+    var _indexInfluxv1 = document.getElementById("NumbersInfluxDB_value1");
+    while (_indexInflux.length)
+    _indexInfluxv1.remove(0);
+
+    for (var i = 0; i < NUMBERS.length; ++i){
+        var option = document.createElement("option");
+        option.text = NUMBERS[i]["name"];
+        option.value = i;
+        _index.add(option);
+
+        var optionInflux = document.createElement("option");
+        optionInflux.text = NUMBERS[i]["name"];
+        optionInflux.value = i;
+        _indexInflux.add(optionInflux);
+
+        var optionInfluxv1 = document.createElement("option");
+        optionInfluxv1.text = NUMBERS[i]["name"];
+        optionInfluxv1.value = i;
+        _indexInfluxv1.add(optionInfluxv1);
+
+    }
+    _index.selectedIndex = 0; 
+    _indexInflux.selectedIndex = 0;
+    _indexInfluxv1.selectedIndex = 0;
+}
+
+
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}	
+
+
+function WriteParameter(_param, _category, _cat, _name, _optional, _number = -1){
+    let anzpara;
+    try {
+        anzpara = _param[_cat][_name].anzParam;	
+    }
+    catch (error) {
+        firework.launch("Parameter '" + _name + "' in category '" + _cat + "' is unknown!", 'danger', 30000);
+        return;
+    }
+
+    if (_number > -1) {
+        if ((NUMBERS[_number] == undefined) || (NUMBERS[_number][_cat] == undefined) ||  (NUMBERS[_number][_cat][_name] == undefined))
+            return;
+
+        if (_optional) {
+            document.getElementById(_cat+"_"+_name+"_enabled").checked = NUMBERS[_number][_cat][_name]["enabled"];
+            for (var j = 1; j <= anzpara; ++j) {
+                document.getElementById(_cat+"_"+_name+"_value"+j).disabled = !NUMBERS[_number][_cat][_name]["enabled"];	
+            }		
+        }
+        document.getElementById(_cat+"_"+_name+"_text").style.color = "black"
+        setEnabled(_cat+"_"+_name, true);
+
+        for (var j = 1; j <= anzpara; ++j) {
+            let element = document.getElementById(_cat+"_"+_name+"_value"+j);
+            if (element.tagName.toLowerCase() == "select") {
+                var textToFind = NUMBERS[_number][_cat][_name]["value"+j];
+                if (textToFind == undefined)
+                    continue;
+
+                _isFound = false;
+                element.selectedIndex = -1;
+                for (var i = 0; i < element.options.length; i++) {
+                    if (element.options[i].value.toLowerCase() === textToFind.toLowerCase()) {
+                        element.selectedIndex = i;
+                        _isFound = true;
+                        break;
+                    }
+                }
+                if (!_isFound)
+                {
+                    _zw_txt = "In the selected field the value '" + textToFind + "' in the parameter '";
+                    _zw_txt = _zw_txt + _cat + "' in the field '" + _name + "' is invalid. PLEASE CHECK BEFORE SAVING!";
+                    firework.launch(_zw_txt, 'warning', 10000);
+                }
+            }
+            else if ((element.getAttribute("type") != null) && (element.getAttribute("type").toLowerCase() == "checkbox")) {
+                element.checked = NUMBERS[_number][_cat][_name]["value"+j] == "true";
+            }
+            else {
+                element.value = NUMBERS[_number][_cat][_name]["value"+j];
+            }
+        }
+    }
+    else {
+        if (_optional) {
+            document.getElementById(_cat+"_"+_name+"_enabled").checked = _param[_cat][_name]["enabled"];
+            for (var j = 1; j <= anzpara; ++j) {
+                document.getElementById(_cat+"_"+_name+"_value"+j).disabled = !_param[_cat][_name]["enabled"];	
+            }		
+        }
+        document.getElementById(_cat+"_"+_name+"_text").style.color = "black"
+        setEnabled(_cat+"_"+_name, true);
+
+        for (var j = 1; j <= anzpara; ++j) {
+            let element = document.getElementById(_cat+"_"+_name+"_value"+j);
+            if (element.tagName.toLowerCase() == "select") {
+                var textToFind = _param[_cat][_name]["value"+j];
+                if (textToFind == undefined)
+                    continue;
+                
+                _isFound = false;
+                element.selectedIndex = -1;
+                for (var i = 0; i < element.options.length; i++) {
+                    if (element.options[i].value.toLowerCase() === textToFind.toLowerCase()) {
+                        element.selectedIndex = i;
+                        _isFound = true;
+                        break;
+                    }
+                }
+                if (!_isFound)
+                {
+                    _zw_txt = "In the selected field the value '" + textToFind + "' in the section '";
+                    _zw_txt = _zw_txt + _cat + "' in the field '" + _name + "' is invalid. PLEASE CHECK BEFORE SAVING!";
+                    firework.launch(_zw_txt, 'warning', 10000);
+                }
+
+            }
+            else if ((element.getAttribute("type") != null) && (element.getAttribute("type").toLowerCase() == "checkbox")) {
+                element.checked = _param[_cat][_name]["value"+j] == "true";
+            }
+            else {
+                element.value = _param[_cat][_name]["value"+j];
+            }
+        }	
+    }
+
+    ///////////////// am Ende, falls Kategorie als gesamtes nicht ausgewählt --> deaktivieren
+    if (_category[_cat]["enabled"] == false) 
+    {
+        if (_optional) {
+            document.getElementById(_cat+"_"+_name+"_enabled").disabled = true;
+            for (var j = 1; j <= anzpara; ++j) {
+                document.getElementById(_cat+"_"+_name+"_value"+j).disabled = true;
+            }	
+        }
+        document.getElementById(_cat+"_"+_name+"_text").style="color: gray;"
+        setEnabled(_cat+"_"+_name, false);
+    }
+
+    EnDisableItem(_category[_cat]["enabled"], _param, _category, _cat, _name, _optional, _number);
+}
+
+
+function InvertEnableItem(_cat, _param)
+{
+    _zw = _cat + "_" + _param + "_enabled";
+    _isOn = document.getElementById(_zw).checked;
+
+    _color = "rgb(122, 122, 122)";
+    if (_isOn) {
+        _color = "black";
+    }
+
+    _zw = _cat + "_" + _param + "_text";
+    document.getElementById(_zw).disabled = !_isOn;
+    document.getElementById(_zw).style.color = _color;
+
+    setEnabled(_cat + "_" + _param, _isOn);
+
+    for (var j = 1; j <= param[_cat][_param]["anzParam"]; ++j) {
+            document.getElementById(_cat+"_"+_param+"_value"+j).disabled = !_isOn;	
+            document.getElementById(_cat+"_"+_param+"_value"+j).style.color = _color;
+    }
+}
+
+
+function setEnabled(className, enabled) {
+    _color = "rgb(122, 122, 122)";
+    if (enabled) {
+        _color = "black";
+    }
+
+    let elements = document.getElementsByClassName(className);
+    for (i = 0; i < elements.length; i++) {
+        if (enabled) {
+            elements[i].classList.remove("disabled");
+        } else {
+            elements[i].classList.add("disabled");
+        }
+
+        let inputs = elements[i].getElementsByTagName("input");
+        for (j = 0; j < inputs.length; j++) {
+            if (inputs[j].id.endsWith("_enabled"))
+                continue;
+
+            inputs[j].style.color = _color;
+            if (enabled) {
+                inputs[j].removeAttribute("disabled");
+            } else {
+                inputs[j].setAttribute("disabled", "disabled");
+            }
+        }
+    }
+}
+
+
+function setVisible(className, visible) {
+    let elements = document.getElementsByClassName(className);
+    for (i = 0; i < elements.length; i++) {
+        if (visible) {
+            elements[i].classList.remove("hidden");
+        } else {
+            elements[i].classList.add("hidden");
+        }
+    }
+}
+
+
+function EnDisableItem(_status, _param, _category, _cat, _name, _optional, _number = -1)
+{
+    _status = _category[_cat]["enabled"];
+
+    _color = "rgb(122, 122, 122)";
+    if (_status) {
+        _color = "black";
+    }
+
+    if (_optional) {
+        document.getElementById(_cat+"_"+_name+"_enabled").disabled = !_status;
+        document.getElementById(_cat+"_"+_name+"_enabled").style.color = _color;	
+    }
+
+    if (_number == -1){
+        if (!_param[_cat][_name]["enabled"]) {
+            _status = false;
+            _color = "rgb(122, 122, 122)";
+        }
+    }
+    else
+        if (!NUMBERS[_number][_cat][_name]["enabled"]) {
+                _status = false;
+                _color = "rgb(122, 122, 122)";
+            }
+
+
+    document.getElementById(_cat+"_"+_name+"_text").disabled = !_status;
+    document.getElementById(_cat+"_"+_name+"_text").style.color = _color;
+
+    setEnabled(_cat+"_"+_name, _status);
+
+    for (var j = 1; j <= _param[_cat][_name]["anzParam"]; ++j) {
+            document.getElementById(_cat+"_"+_name+"_value"+j).disabled = !_status;	
+            document.getElementById(_cat+"_"+_name+"_value"+j).style.color = _color;	
+    }
+}
+
+
+function ReadParameter(_param, _cat, _name, _optional, _number = -1){
+    if (_number > -1) {
+        if (_cat == "Digits")
+            _cat = "digit";
+        if (_cat == "Analog")
+            _cat = "analog";
+
+        if ((NUMBERS[_number] == undefined) || (NUMBERS[_number][_cat] == undefined) ||  (NUMBERS[_number][_cat][_name] == undefined))
+            return;
+
+
+        if (_optional) {
+            NUMBERS[_number][_cat][_name]["enabled"] = document.getElementById(_cat+"_"+_name+"_enabled").checked;			
+        }
+
+        for (var j = 1; j <= _param[_cat][_name]["anzParam"]; ++j) {
+            let element = document.getElementById(_cat+"_"+_name+"_value"+j);
+            if (element.tagName.toLowerCase() == "select") {
+                NUMBERS[_number][_cat][_name]["value"+j] = element.selectedIndex > -1 ? element.options[element.selectedIndex].value : "";
+            }
+            else if ((element.getAttribute("type") != null) && (element.getAttribute("type").toLowerCase() == "checkbox")) {
+                NUMBERS[_number][_cat][_name]["value"+j] = element.checked;
+            }
+            else {
+                if ((NUMBERS[_number][_cat][_name].checkRegExList != null) && (NUMBERS[_number][_cat][_name].checkRegExList[j-1] != null)) {
+                    if (!element.value.match(NUMBERS[_cat][_name].checkRegExList[j-1])) {
+                        element.classList.add("invalid-input");
+                    } else {
+                        element.classList.remove("invalid-input");
+                    }
+                }
+                NUMBERS[_number][_cat][_name]["value"+j] = element.value;
+            }
+        }
+    }
+    else
+    {
+        if (_optional) {
+            _param[_cat][_name]["enabled"] = document.getElementById(_cat+"_"+_name+"_enabled").checked;			
+        }
+
+        for (var j = 1; j <= _param[_cat][_name]["anzParam"]; ++j) {
+            let element = document.getElementById(_cat+"_"+_name+"_value"+j);
+            if (element.tagName.toLowerCase() == "select") {
+                _param[_cat][_name]["value"+j] = element.selectedIndex > -1 ? element.options[element.selectedIndex].value : "";
+            }
+            else if ((element.getAttribute("type") != null) && (element.getAttribute("type").toLowerCase() == "checkbox")) {
+                _param[_cat][_name]["value"+j] = element.checked;
+            }
+            else {
+                if ((_param[_cat][_name].checkRegExList != null) && (_param[_cat][_name].checkRegExList[j-1] != null)) {
+                    if (!element.value.match(_param[_cat][_name].checkRegExList[j-1])) {
+                        element.classList.add("invalid-input");
+                    } else {
+                        element.classList.remove("invalid-input");
+                    }
+                }
+                _param[_cat][_name]["value"+j] = element.value;
+            }
+        }		
+    }
+}
+
+
+function UpdateInputIndividual(sel)
+{
+    if (NUNBERSAkt != -1)
+    {
+        ReadParameter(param, "PostProcessing", "DecimalShift", true, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "AnalogDigitalTransitionStart", true, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "MaxRateValue", true, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "MaxRateType", true, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "ExtendedResolution", false, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "IgnoreLeadingNaN", false, NUNBERSAkt);
+        ReadParameter(param, "PostProcessing", "AllowNegativeRates", false, NUNBERSAkt);
+        ReadParameter(param, "InfluxDB", "Field", true, NUNBERSAkt);
+        ReadParameter(param, "InfluxDBv2", "Field", true, NUNBERSAkt);
+        ReadParameter(param, "InfluxDB", "Measurement", true, NUNBERSAkt);
+        ReadParameter(param, "InfluxDBv2", "Measurement", true, NUNBERSAkt);
+    }
+
+//	var sel = document.getElementById("Numbers_value1");
+    NUNBERSAkt = sel.selectedIndex;
+    WriteParameter(param, category, "PostProcessing", "DecimalShift", true, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "AnalogDigitalTransitionStart", true, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "MaxRateValue", true, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "MaxRateType", true, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "ExtendedResolution", false, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "IgnoreLeadingNaN", false, NUNBERSAkt);
+    WriteParameter(param, category, "PostProcessing", "AllowNegativeRates", false, NUNBERSAkt);
+    WriteParameter(param, category, "InfluxDB", "Field", true, NUNBERSAkt);
+    WriteParameter(param, category, "InfluxDBv2", "Field", true, NUNBERSAkt);
+    WriteParameter(param, category, "InfluxDB", "Measurement", true, NUNBERSAkt);
+    WriteParameter(param, category, "InfluxDBv2", "Measurement", true, NUNBERSAkt);
+}
+
+
+function UpdateInput() {
+    document.getElementById("Category_Digits_enabled").checked = category["Digits"]["enabled"];
+    setVisible("DigitItem", category["Digits"]["enabled"]);
+
+    document.getElementById("Category_Analog_enabled").checked = category["Analog"]["enabled"];
+    setVisible("AnalogItem", category["Analog"]["enabled"]);
+
+    document.getElementById("Category_MQTT_enabled").checked = category["MQTT"]["enabled"];
+    setVisible("MQTTItem", category["MQTT"]["enabled"]);
+
+    document.getElementById("Category_GPIO_enabled").checked = category["GPIO"]["enabled"];
+    setVisible("GPIO_item", category["GPIO"]["enabled"]);
+
+    document.getElementById("Category_InfluxDB_enabled").checked = category["InfluxDB"]["enabled"];
+    setVisible("InfluxDBv1Item", category["InfluxDB"]["enabled"]);
+
+    document.getElementById("Category_InfluxDBv2_enabled").checked = category["InfluxDBv2"]["enabled"];
+    setVisible("InfluxDBv2Item", category["InfluxDBv2"]["enabled"]);
+
+    WriteParameter(param, category, "TakeImage", "RawImagesLocation", true);
+    WriteParameter(param, category, "TakeImage", "RawImagesRetention", true);
+    WriteParameter(param, category, "TakeImage", "Demo", false);
+    WriteParameter(param, category, "TakeImage", "WaitBeforeTakingPicture", false);
+    WriteParameter(param, category, "TakeImage", "ImageQuality", false);
+    WriteParameter(param, category, "TakeImage", "Brightness", false);
+    WriteParameter(param, category, "TakeImage", "Contrast", false);
+    WriteParameter(param, category, "TakeImage", "Saturation", false);
+    WriteParameter(param, category, "TakeImage", "LEDIntensity", false);
+    WriteParameter(param, category, "TakeImage", "ImageSize", false);
+    WriteParameter(param, category, "TakeImage", "FixedExposure", false);
+
+    WriteParameter(param, category, "Alignment", "SearchFieldX", false);		
+    WriteParameter(param, category, "Alignment", "SearchFieldY", false);		
+    WriteParameter(param, category, "Alignment", "AlignmentAlgo", true);
+    WriteParameter(param, category, "Alignment", "FlipImageSize", false);
+    WriteParameter(param, category, "Alignment", "InitialMirror", false);			
+
+    WriteParameter(param, category, "Digits", "CNNGoodThreshold", true);
+    WriteParameter(param, category, "Digits", "ROIImagesLocation", true);		
+    WriteParameter(param, category, "Digits", "ROIImagesRetention", true);		
+    
+    WriteParameter(param, category, "Analog", "ROIImagesLocation", true);		
+    WriteParameter(param, category, "Analog", "ROIImagesRetention", true);		
+    
+    WriteParameter(param, category, "PostProcessing", "PreValueUse", false);		
+    WriteParameter(param, category, "PostProcessing", "PreValueAgeStartup", true);		
+//	WriteParameter(param, category, "PostProcessing", "AllowNegativeRates", true);
+    WriteParameter(param, category, "PostProcessing", "ErrorMessage", false);
+    WriteParameter(param, category, "PostProcessing", "CheckDigitIncreaseConsistency", false);
+
+    WriteParameter(param, category, "MQTT", "Uri", true);	
+    WriteParameter(param, category, "MQTT", "MainTopic", true);	
+    WriteParameter(param, category, "MQTT", "ClientID", true);	
+    WriteParameter(param, category, "MQTT", "user", true);	
+    WriteParameter(param, category, "MQTT", "password", true);
+    WriteParameter(param, category, "MQTT", "RetainMessages", false);
+    WriteParameter(param, category, "MQTT", "HomeassistantDiscovery", false);
+    WriteParameter(param, category, "MQTT", "MeterType", true);
+    
+    WriteParameter(param, category, "InfluxDB", "Uri", true);	
+    WriteParameter(param, category, "InfluxDB", "Database", true);	
+//	WriteParameter(param, category, "InfluxDB", "Measurement", true);	
+    WriteParameter(param, category, "InfluxDB", "user", true);	
+    WriteParameter(param, category, "InfluxDB", "password", true);	
+//	WriteParameter(param, category, "InfluxDB", "Field", true);
+
+    WriteParameter(param, category, "InfluxDBv2", "Uri", true);	
+    WriteParameter(param, category, "InfluxDBv2", "Database", true);	
+//	WriteParameter(param, category, "InfluxDBv2", "Measurement", true);	
+    WriteParameter(param, category, "InfluxDBv2", "Org", true);	
+    WriteParameter(param, category, "InfluxDBv2", "Token", true);	
+//	WriteParameter(param, category, "InfluxDBv2", "Field", true);
+
+    WriteParameter(param, category, "GPIO", "IO0", true);
+    WriteParameter(param, category, "GPIO", "IO1", true);
+    WriteParameter(param, category, "GPIO", "IO3", true);
+    WriteParameter(param, category, "GPIO", "IO4", true);
+    WriteParameter(param, category, "GPIO", "IO12", true);
+    WriteParameter(param, category, "GPIO", "IO13", true);
+    WriteParameter(param, category, "GPIO", "LEDType", false);
+    WriteParameter(param, category, "GPIO", "LEDNumbers", false);
+    WriteParameter(param, category, "GPIO", "LEDColor", false);
+
+    WriteParameter(param, category, "AutoTimer", "AutoStart", false);	
+    WriteParameter(param, category, "AutoTimer", "Interval", false);
+
+    WriteParameter(param, category, "DataLogging", "DataLogActive", false);	
+    WriteParameter(param, category, "DataLogging", "DataFilesRetention", false);	
+
+    WriteParameter(param, category, "Debug", "LogLevel", false);
+    WriteParameter(param, category, "Debug", "LogfilesRetention", false);
+
+    WriteParameter(param, category, "System", "TimeZone", true);
+    WriteParameter(param, category, "System", "Hostname", true);
+    WriteParameter(param, category, "System", "TimeServer", true);
+    WriteParameter(param, category, "System", "RSSIThreshold", true);
+    WriteParameter(param, category, "System", "CPUFrequency", true);
+
+    WriteModelFiles();
+}
+
+
+function WriteModelFiles()
+{
+    list_tflite = getTFLITEList();
+
+    var _indexDig = document.getElementById("Digits_Model_value1");
+    var _indexAna = document.getElementById("Analog_Model_value1");
+    while (_indexDig.length)
+        _indexDig.remove(0);
+    while (_indexAna.length)
+        _indexAna.remove(0);
+
+    for (var i = 0; i < list_tflite.length; ++i){
+        var optionDig = document.createElement("option");
+        var optionAna = document.createElement("option");
+        
+        var text = list_tflite[i].replace("/config/", "");
+        
+        if (list_tflite[i].includes("/dig")) { // Its a digital file, only show in the digital list box
+        optionDig.text = text;
+        optionDig.value = list_tflite[i];
+        _indexDig.add(optionDig);
+        }
+        else if (list_tflite[i].includes("/ana")) { // Its a digital file, only show in the analog list box
+        optionAna.text = text;
+        optionAna.value = list_tflite[i];
+        _indexAna.add(optionAna);
+        }
+        else { // all other files, show in both list boxes
+        optionDig.text = text;
+        optionDig.value = list_tflite[i];
+        _indexDig.add(optionDig);
+        
+        optionAna.text = text;
+        optionAna.value = list_tflite[i];
+        _indexAna.add(optionAna);
+        }
+    }
+
+    WriteParameter(param, category, "Analog", "Model", false);		
+    WriteParameter(param, category, "Digits", "Model", false);		
+}
+
+
+function ReadParameterAll()
+{
+    category["Analog"]["enabled"] = document.getElementById("Category_Analog_enabled").checked;
+    category["Digits"]["enabled"] = document.getElementById("Category_Digits_enabled").checked;
+    category["MQTT"]["enabled"] = document.getElementById("Category_MQTT_enabled").checked;
+    category["InfluxDB"]["enabled"] = document.getElementById("Category_InfluxDB_enabled").checked;
+    category["InfluxDBv2"]["enabled"] = document.getElementById("Category_InfluxDBv2_enabled").checked;
+    category["GPIO"]["enabled"] = document.getElementById("Category_GPIO_enabled").checked;
+    
+    ReadParameter(param, "TakeImage", "RawImagesLocation", true);
+    ReadParameter(param, "TakeImage", "RawImagesRetention", true);
+    ReadParameter(param, "TakeImage", "Demo", false);
+    ReadParameter(param, "TakeImage", "WaitBeforeTakingPicture", false);
+    ReadParameter(param, "TakeImage", "ImageQuality", false);
+    ReadParameter(param, "TakeImage", "Brightness", false);
+    ReadParameter(param, "TakeImage", "Contrast", false);
+    ReadParameter(param, "TakeImage", "Saturation", false);
+    ReadParameter(param, "TakeImage", "LEDIntensity", false);
+    ReadParameter(param, "TakeImage", "ImageSize", false);
+    ReadParameter(param, "TakeImage", "FixedExposure", false);
+
+    ReadParameter(param, "Alignment", "SearchFieldX", false);	
+    ReadParameter(param, "Alignment", "SearchFieldY", false);
+    ReadParameter(param, "Alignment", "AlignmentAlgo", true);
+    ReadParameter(param, "Alignment", "FlipImageSize", false);
+    ReadParameter(param, "Alignment", "InitialMirror", false);
+
+    ReadParameter(param, "Digits", "Model", false);
+    ReadParameter(param, "Digits", "CNNGoodThreshold", true);
+    ReadParameter(param, "Digits", "ROIImagesLocation", true);
+    ReadParameter(param, "Digits", "ROIImagesRetention", true);
+
+    ReadParameter(param, "Analog", "Model", false);
+    ReadParameter(param, "Analog", "ROIImagesLocation", true);
+    ReadParameter(param, "Analog", "ROIImagesRetention", true);
+
+    ReadParameter(param, "PostProcessing", "PreValueUse", false);
+    ReadParameter(param, "PostProcessing", "PreValueAgeStartup", true);
+    ReadParameter(param, "PostProcessing", "ErrorMessage", false);
+    ReadParameter(param, "PostProcessing", "CheckDigitIncreaseConsistency", false);
+
+    ReadParameter(param, "MQTT", "Uri", true);
+    ReadParameter(param, "MQTT", "MainTopic", true);
+    ReadParameter(param, "MQTT", "ClientID", true);
+    ReadParameter(param, "MQTT", "user", true);
+    ReadParameter(param, "MQTT", "password", true);
+    ReadParameter(param, "MQTT", "RetainMessages", false);
+    ReadParameter(param, "MQTT", "HomeassistantDiscovery", false);
+    ReadParameter(param, "MQTT", "MeterType", true);
+
+    ReadParameter(param, "InfluxDB", "Uri", true);
+    ReadParameter(param, "InfluxDB", "Database", true);
+    ReadParameter(param, "InfluxDB", "Measurement", true);
+    ReadParameter(param, "InfluxDB", "user", true);
+    ReadParameter(param, "InfluxDB", "password", true);
+
+    ReadParameter(param, "InfluxDBv2", "Uri", true);
+    ReadParameter(param, "InfluxDBv2", "Database", true);
+    ReadParameter(param, "InfluxDBv2", "Measurement", true);
+    ReadParameter(param, "InfluxDBv2", "Org", true);
+    ReadParameter(param, "InfluxDBv2", "Token", true);
+//	ReadParameter(param, "InfluxDB", "Field", true);	
+
+    ReadParameter(param, "GPIO", "IO0", true);
+    ReadParameter(param, "GPIO", "IO1", true);
+    ReadParameter(param, "GPIO", "IO3", true);
+    ReadParameter(param, "GPIO", "IO4", true);
+    ReadParameter(param, "GPIO", "IO12", true);
+    ReadParameter(param, "GPIO", "IO13", true);
+    ReadParameter(param, "GPIO", "LEDType", false);
+    ReadParameter(param, "GPIO", "LEDNumbers", false);
+    ReadParameter(param, "GPIO", "LEDColor", false);
+    // Folgende Zeilen sind für Abwärtskompatibität < v9.0.0 notwendig (manchmal parameter auskommentiert)
+    param["GPIO"]["LEDType"]["enabled"] = true;
+    param["GPIO"]["LEDNumbers"]["enabled"] = true;
+    param["GPIO"]["LEDColor"]["enabled"] = true;
+    param["GPIO"]["LEDType"]["found"] = true;
+    param["GPIO"]["LEDNumbers"]["found"] = true;
+    param["GPIO"]["LEDColor"]["found"] = true;
+
+    ReadParameter(param, "AutoTimer", "AutoStart", false);
+    ReadParameter(param, "AutoTimer", "Interval", false);
+    
+    ReadParameter(param, "DataLogging", "DataLogActive", false);
+    ReadParameter(param, "DataLogging", "DataFilesRetention", false);
+
+    ReadParameter(param, "Debug", "LogLevel", false);
+    ReadParameter(param, "Debug", "LogfilesRetention", false);
+
+    ReadParameter(param, "System", "TimeZone", true);
+    ReadParameter(param, "System", "Hostname", true);
+    ReadParameter(param, "System", "TimeServer", true);
+    ReadParameter(param, "System", "RSSIThreshold", true);
+    ReadParameter(param, "System", "CPUFrequency", true);
+
+    var sel = document.getElementById("Numbers_value1");
+    UpdateInputIndividual(sel);
+    
+//	FormatDecimalValue(param, "PostProcessing", "MaxRateValue");
+}
+
+
+function FormatDecimalValue(_param, _cat, _name) {
+    for (var j = 1; j <= _param[_cat][_name]["anzParam"]; ++j) {
+        var _val = _param[_cat][_name]["value"+j];
+        _val = _val.replace(",", ".");
+        _param[_cat][_name]["value"+j] = _val;
+    }
+}
+
+
+function UpdateAfterCategoryCheck() {
+    ReadParameterAll();
+    category["Analog"]["enabled"] = document.getElementById("Category_Analog_enabled").checked;
+    category["Digits"]["enabled"] = document.getElementById("Category_Digits_enabled").checked;
+    category["MQTT"]["enabled"] = document.getElementById("Category_MQTT_enabled").checked;
+    category["InfluxDB"]["enabled"] = document.getElementById("Category_InfluxDB_enabled").checked;
+    category["InfluxDBv2"]["enabled"] = document.getElementById("Category_InfluxDBv2_enabled").checked;
+    category["GPIO"]["enabled"] = document.getElementById("Category_GPIO_enabled").checked;
+
+    UpdateInput();
+    var sel = document.getElementById("Numbers_value1");
+    UpdateInputIndividual(sel);
+}
+
+
+function UpdateExpertModus()
+{
+//	var _style = 'display:none;';
+    var _style_pur = 'none';
+    var _hidden = true;
+    if (document.getElementById("ExpertModus_enabled").checked) {
+//		_style = '';
+        _style_pur = '';
+        _hidden = false;
+        document.getElementById("Edit_Config_Direct").style.display = "";
+        firework.launch("Expert view activated. Please use carefully", 'warning', 5000);
+    }
+    else
+    {
+        document.getElementById("Edit_Config_Direct").style.display = "none"; 
+    }
+
+    const expert = document.querySelectorAll(".expert");
+    for (var i = 0; i < expert.length; i++) {
+        expert[i].style.display = _style_pur;
+//		document.getElementById(expert[i].id).style = _style;
+    }
+
+    // Enable / Disable die Optionen in den Menues für die Auswahl. Falls kein Expertenmodus soll nur ein Wert (built-in-led oder externan-flash-ws281x) möglich sein
+    Array.from(document.querySelector("#GPIO_IO4_value1").options).forEach(function(option_element) {
+        if (option_element.value != "built-in-led")
+            option_element.hidden = _hidden;
+    });	
+
+    Array.from(document.querySelector("#GPIO_IO12_value1").options).forEach(function(option_element) {
+        if (option_element.value != "external-flash-ws281x")
+            option_element.hidden = _hidden;
+    });
+}
+
+
+function saveTextAsFile()
+{
+    ReadParameterAll();
+    if (document.getElementsByClassName("invalid-input").length > 0) {
+        firework.launch("Settings cannot be saved. Please check your entries!", 'danger', 30000);
+        return;
+    }
+
+    if (confirm("Are you sure you want to save the configuration?")) {
+        ReadParameterAll();
+        WriteConfigININew();
+        SaveConfigToServer(domainname);
+
+        firework.launch('Configuration saved. It will get applied after the next reboot!', 'success', 5000);
+    }
+}
+
+
+function doReboot() {
+    if (confirm("Are you sure you want to reboot?")) {
+        var stringota = getDomainname() + "/reboot";
+        window.location = stringota;
+        window.location.href = stringota;
+        window.location.assign(stringota);
+        window.location.replace(stringota);
+    }
+}
+
+
+function editConfigDirect() {
+    if (confirm("Proceed to switch the view? Unsaved changes get lost")) {
+        var stringota = getDomainname() + "/edit_config.html?v=3fbff0a";
+        window.location = stringota;
+        window.location.href = stringota;
+        window.location.assign(stringota);
+        window.location.replace(stringota);
+    }	
+}
+
+
+function numberChanged()
+{
+    var sel = document.getElementById("Numbers_value1");
+    _neu = sel.selectedIndex;
+    UpdateInputIndividual(sel);
+
+    var _selInflux = document.getElementById("NumbersInfluxDBv2_value1");
+    if (_selInflux.selectedIndex != _neu)
+        _selInflux.selectedIndex = _neu
+}
+
+    
+function numberInfluxDBv2Changed()
+{
+    var sel = document.getElementById("NumbersInfluxDBv2_value1");
+    _neu = sel.selectedIndex;
+    UpdateInputIndividual(sel);
+
+    var _sel2 = document.getElementById("Numbers_value1");
+    if (_sel2.selectedIndex != _neu)
+        _sel2.selectedIndex = _neu
+
+    var _sel3 = document.getElementById("NumbersInfluxDB_value1");
+    if (_sel3.selectedIndex != _neu)
+        _sel3.selectedIndex = _neu
+}
+
+
+function numberInfluxDBChanged()
+{
+    var sel = document.getElementById("NumbersInfluxDB_value1");
+    _neu = sel.selectedIndex;
+    UpdateInputIndividual(sel);
+    
+    var _sel2 = document.getElementById("Numbers_value1");
+    if (_sel2.selectedIndex != _neu)
+        _sel2.selectedIndex = _neu
+
+    var _sel3 = document.getElementById("NumbersInfluxDBv2_value1");
+    if (_sel3.selectedIndex != _neu)
+        _sel3.selectedIndex = _neu
+}
+
+    /* hash #description open the details part of the page */
+function openDescription() 
+{
+    if(window.location.hash) {
+        var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+        if(hash == 'description')
+            document.getElementById("desc_details").open = true;
+			document.getElementById("reboot").style.display = "none";
+			document.getElementById("reboot_text").style.display = "none";
+    }
+}
+
+openDescription();
+LoadConfigNeu();
+ 
+</script>
+ 
+</body>
+</html>

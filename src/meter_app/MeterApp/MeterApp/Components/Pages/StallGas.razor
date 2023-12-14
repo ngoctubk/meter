@@ -1,9 +1,18 @@
 ﻿@page "/StallGas/{StallCode}"
 
-Mã gian hàng: @StallCode
-<QuickGrid Items="@MeterDbContext.GasMeters.Where(w => w.StallCode == StallCode).OrderByDescending(w => w.ToTimestamp)" Pagination="@pagination">
-    <PropertyColumn Property="@(p => p.Value)" Title="Chỉ số ga" />
-    <PropertyColumn Property="@(p => p.FromTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Từ ngày" />
-    <PropertyColumn Property="@(p => p.ToTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Đến ngày" />
-</QuickGrid>
-<Paginator State="@pagination" />
+@if (MeterDbContext != null)
+{
+    <div>Mã gian hàng: @StallCode</div>
+    @if (StallName != null)
+    {
+        <div>Tên gian hàng: @StallName</div>
+    }
+    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmDelete()">Làm mới từ đầu</button>
+
+    <QuickGrid Items="@MeterDbContext.GasMeters.Where(w => w.StallCode == StallCode).OrderByDescending(w => w.ToTimestamp)" Pagination="@pagination">
+        <PropertyColumn Property="@(p => p.Value)" Title="Chỉ số ga" />
+        <PropertyColumn Property="@(p => p.FromTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Từ ngày" />
+        <PropertyColumn Property="@(p => p.ToTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Đến ngày" />
+    </QuickGrid>
+    <Paginator State="@pagination" />
+}
