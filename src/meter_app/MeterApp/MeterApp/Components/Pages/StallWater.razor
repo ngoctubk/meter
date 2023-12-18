@@ -9,7 +9,7 @@
     }
     <button class="btn btn-sm btn-danger" @onclick="() => ConfirmDelete()">Làm mới từ đầu</button>
 
-    <QuickGrid Items="@MeterDbContext.WaterMeters.Where(w => w.StallCode == StallCode).OrderByDescending(w => w.ToTimestamp)" Pagination="@pagination">
+    <QuickGrid Class="table table-bordered table-striped table-hover" Items="@MeterDbContext.WaterMeters.Where(w => w.StallCode == StallCode).OrderByDescending(w => w.ToTimestamp)" Pagination="@pagination">
         <PropertyColumn Property="@(p => p.Value)" Title="Chỉ số nước" />
         <PropertyColumn Property="@(p => p.FromTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Từ ngày" />
         <PropertyColumn Property="@(p => p.ToTimestamp.ToLocalTime())" Format="dd/MM/yyyy hh:mm:ss tt" Title="Đến ngày" />

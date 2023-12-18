@@ -1,6 +1,6 @@
 ﻿@if (MeterDbContext != null)
 {
-    <QuickGrid Items="@MeterDbContext.Stalls" Pagination="@pagination">
+    <QuickGrid Class="table table-bordered table-hover" Items="@MeterDbContext.Stalls" Pagination="@pagination">
         <PropertyColumn Property="@(p => p.StallCode)" Title="Mã" />
         <PropertyColumn Property="@(p => p.Name)" Title="Gian hàng" />
         <TemplateColumn Title="Nước">
