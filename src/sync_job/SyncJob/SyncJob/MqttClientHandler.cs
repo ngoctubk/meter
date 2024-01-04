@@ -36,6 +36,7 @@ namespace SyncJob
                 NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
             };
             options.Converters.Add(new DateTimeJsonConverterUsingDateTimeParse());
+            options.Converters.Add(new EmptyStringToDoubleConverter());
 
             // If has error, save to Errors table and do nothing
             var meter = JsonSerializer.Deserialize<MqttMeter>(e.ApplicationMessage.PayloadSegment.AsSpan(), options);
